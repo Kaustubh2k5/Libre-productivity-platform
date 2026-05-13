@@ -1,0 +1,14 @@
+{
+  "features": {
+    "ghcr.io/devcontainers-extra/features/pnpm:2": {
+      "version": "2.0.5",
+      "resolved": "ghcr.io/devcontainers-extra/features/pnpm@sha256:694c2b6182435c9e9c06f6071728b087c1181b38c18cecf0defe2ab8c11cddd6",
+      "integrity": "sha256:694c2b6182435c9e9c06f6071728b087c1181b38c18cecf0defe2ab8c11cddd6"
+    },
+    "ghcr.io/helpers4/devcontainer/vite-plus:1": {
+      "version": "1.0.3",
+      "resolved": "ghcr.io/helpers4/devcontainer/vite-plus@sha256:7a28985c86e4252cf6106186e6bc5aca73fb1e4ad9d3fcdf0d5eec42728af61b",
+      "integrity": "sha256:7a28985c86e4252cf6106186e6bc5aca73fb1e4ad9d3fcdf0d5eec42728af61b"
+    }
+  }
+}

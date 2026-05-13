@@ -1,0 +1,10 @@
+node_modules
+dist
+coverage
+*.html
+*.json
+*.yaml
+*.md 
+*.config.ts
+.gitignore
+*.config.js 
