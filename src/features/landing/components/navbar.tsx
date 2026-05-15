@@ -21,7 +21,7 @@ export const LibreNavbar = () => {
           <img
             src="src/assets/libre.svg"
             alt="Libre"
-            className="w-7 h-7 object-contain brightness-0 invert opacity-90"
+            className="w-12 h-12 object-contain brightness-0 invert opacity-90"
           />
         </div>
 
@@ -40,12 +40,12 @@ export const LibreNavbar = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-4">
-          <Link to="/signup">
+          <Link to="./auth/login">
             <button className="text-[12px] font-medium text-white/50 hover:text-white transition-colors cursor-pointer">
-              Sign In
+              Log In
             </button>
           </Link>
-          <Link to="/signup">
+          <Link to="./auth/signup">
             <button className="glass-dark px-5 py-2 rounded-full flex items-center gap-2 border-white/10 hover:bg-white/5 transition-all text-[12px] font-semibold text-white">
               Become a Member
             </button>

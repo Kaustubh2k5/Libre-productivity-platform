@@ -1,6 +1,7 @@
 import { LibreNavbar } from '../components/navbar';
 import { Button } from '../../../shared/components/ui/buttons';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export const LandingPage = () => {
   return (
@@ -52,7 +53,10 @@ export const LandingPage = () => {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <Button variant="glass">Explore Libre'</Button>
+            <Button variant="glass">
+              {' '}
+              <Link to="/auth">Explore Libre'</Link>
+            </Button>
           </motion.div>
 
           <motion.div
