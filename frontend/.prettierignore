@@ -1,0 +1,9 @@
+node_modules
+dist
+coverage
+*.yaml
+*.md 
+*.config.ts
+.gitignore
+*.config.js 
+.env
