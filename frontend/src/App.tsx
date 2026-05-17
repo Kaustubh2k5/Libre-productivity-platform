@@ -1,12 +1,12 @@
 import { Routes, Route } from 'react-router-dom';
 
-import { LandingPage } from './features/landing/pages/landing-page';
+import { LandingPage } from './pages/landing/pages/landing-page';
 
-import Auth from './features/auth/Auth';
-import AuthLanding from './features/auth/pages/AuthLanding';
-import LoginPage from './features/auth/pages/Login';
-import SignupPage from './features/auth/pages/Signup';
-import ForgotPasswordPage from './features/auth/pages/Forgotpage';
+import Auth from './pages/auth/Auth';
+import AuthLanding from './pages/auth/pages/AuthLanding';
+import LoginPage from './pages/auth/pages/Login';
+import SignupPage from './pages/auth/pages/Signup';
+import ForgotPasswordPage from './pages/auth/pages/Forgotpage';
 function App() {
   return (
     <Routes>

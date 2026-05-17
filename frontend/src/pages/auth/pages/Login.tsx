@@ -1,10 +1,34 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import AuthLayout from './../components/AuthLayout';
+import AuthLayout from '../components/AuthLayout';
 import { Mail, Lock, Eye } from 'lucide-react';
+import { handleLogin } from '../utils';
 
 export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+
+  // function to handle signup request
+  const handleLoginForm = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const validationErrors = handleLogin({
+      email,
+      password,
+    });
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      console.log(validationErrors);
+      return;
+    }
+
+    console.log('Form Submitted');
+
+    // send api POST request using axios
+  };
 
   return (
     <AuthLayout title="Return to Flow" subtitle="Select your method to authenticate">
@@ -42,12 +66,14 @@ export default function LoginPage() {
           <div className="flex-1 h-[1px] bg-white/[0.05]"></div>
         </div>
 
-        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-4" onSubmit={handleLoginForm}>
           <div className="space-y-2">
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email Address"
                 className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-5 py-4 text-sm focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600/20 transition-all placeholder:text-white/20"
               />
@@ -59,6 +85,8 @@ export default function LoginPage() {
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
               <input
                 type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
                 className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-12 py-4 text-sm focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600/20 transition-all placeholder:text-white/20"
               />

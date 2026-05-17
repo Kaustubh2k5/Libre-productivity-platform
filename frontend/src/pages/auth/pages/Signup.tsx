@@ -2,9 +2,55 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthLayout from '../components/AuthLayout';
 import { User, Mail, Lock, CheckCircle2, Circle, Eye } from 'lucide-react';
+import { handleSignup } from '../utils';
+import axios from 'axios';
+
+// define axios instance for requests
+const api = axios.create({
+  baseURL: 'http://localhost:5001/auth/signup',
+});
 
 export default function SignupPage() {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+
+  // function to handle signup request
+  const handleSignupForm = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const validationErrors = handleSignup({
+      username,
+      email,
+      password,
+      confirmPassword: password,
+    });
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      console.log(validationErrors);
+
+      return;
+    }
+
+    console.log('Form Submitted');
+
+    // send api POST request using axios
+    try {
+      const response = await axios.post('http://localhost:3000/signup', {
+        username,
+        email,
+        password,
+      });
+
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <AuthLayout title="Create Identity" subtitle="Join the network">
@@ -42,11 +88,13 @@ export default function SignupPage() {
           <div className="flex-1 h-[1px] bg-white/[0.05]"></div>
         </div>
 
-        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-4" onSubmit={handleSignupForm}>
           <div className="relative">
             <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
             <input
               type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               placeholder="Full Name"
               className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-5 py-4 text-sm focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600/20 transition-all placeholder:text-white/20"
             />
@@ -56,6 +104,8 @@ export default function SignupPage() {
             <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Email Address"
               className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-5 py-4 text-sm focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600/20 transition-all placeholder:text-white/20"
             />
@@ -65,6 +115,8 @@ export default function SignupPage() {
             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
             <input
               type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Set Credential"
               className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-12 py-4 text-sm focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600/20 transition-all placeholder:text-white/20"
             />
