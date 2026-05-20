@@ -104,9 +104,19 @@ backend/**/dist/
 # =========================
 .turbo/
 nx-cache/
-
+# =========================
+# Cloud
+# =========================
+exec -l /
+*.tfvars
+*.tfstate
+.tfstate.backup
+.terraform/
+*.hcl
+.terraform.lock.hcl
 # =========================
 # Misc
 # =========================
 *.swp
 *.swo
+*.rdb

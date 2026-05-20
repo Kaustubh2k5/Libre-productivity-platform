@@ -11,9 +11,25 @@
 		"ghcr.io/helpers4/devcontainer/vite-plus:1": {
 			"installVitePlus": true,
 			"installGlobally": true
+		},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/devcontainers/features/terraform:1": {}
+	},
+
+	"postCreateCommand": "npm install -g pnpm && pnpm install",
+
+	"customizations": {
+		"vscode": {
+		"extensions": [
+			"hashicorp.terraform",
+			"googlecloudtools.cloudcode",
+			"ms-azuretools.vscode-docker",
+			"esbenp.prettier-vscode",
+			"dbaeumer.vscode-eslint"
+		]
 		}
 	}
-
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 

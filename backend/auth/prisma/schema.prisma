@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native","debian-openssl-1.1.x","debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(cuid())
+
+  email             String   @unique
+  passwordHash      String
+
+  name              String?
+
+  isEmailVerified   Boolean  @default(false)
+  isActive          Boolean  @default(true)
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  memberships       Membership[]
+  sessions          RefreshSession[]
+}
+
+model App {
+  id                String   @id @default(cuid())
+
+  name              String
+  clientId          String   @unique
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  memberships       Membership[]
+}
+
+model Membership {
+  id                String   @id @default(cuid())
+
+  userId            String
+  appId             String
+
+  createdAt         DateTime @default(now())
+
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  app               App  @relation(fields: [appId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, appId])
+  @@index([userId])
+  @@index([appId])
+}
+
+model RefreshSession {
+  id                String   @id @default(cuid())
+
+  userId            String
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  tokenHash         String @unique
+
+  expiresAt         DateTime
+  revoked           Boolean  @default(false)
+
+  createdAt         DateTime @default(now())
+
+  @@index([userId])
+}
