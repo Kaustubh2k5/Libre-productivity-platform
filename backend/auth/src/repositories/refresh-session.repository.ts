@@ -1,7 +1,4 @@
-import {
-  Prisma,
-  RefreshSession,
-} from "@prisma/client";
+import { Prisma, RefreshSession } from "@prisma/client";
 
 import { prisma } from "../lib/db.js";
 
@@ -14,22 +11,18 @@ interface CreateRefreshSessionInput {
 export class RefreshSessionRepository {
   async createSession(
     data: CreateRefreshSessionInput,
-    tx: Prisma.TransactionClient = prisma
+    tx: Prisma.TransactionClient = prisma,
   ): Promise<RefreshSession> {
     return tx.refreshSession.create({
       data: {
         userId: data.userId,
-        tokenHash:
-          data.tokenHash,
-        expiresAt:
-          data.expiresAt,
+        tokenHash: data.tokenHash,
+        expiresAt: data.expiresAt,
       },
     });
   }
 
-  async findByTokenHash(
-    tokenHash: string
-  ): Promise<RefreshSession | null> {
+  async findByTokenHash(tokenHash: string): Promise<RefreshSession | null> {
     return prisma.refreshSession.findUnique({
       where: {
         tokenHash,
@@ -37,9 +30,7 @@ export class RefreshSessionRepository {
     });
   }
 
-  async revokeSession(
-    sessionId: string
-  ): Promise<RefreshSession> {
+  async revokeSession(sessionId: string): Promise<RefreshSession> {
     return prisma.refreshSession.update({
       where: {
         id: sessionId,
@@ -50,9 +41,7 @@ export class RefreshSessionRepository {
     });
   }
 
-  async revokeAllUserSessions(
-    userId: string
-  ): Promise<void> {
+  async revokeAllUserSessions(userId: string): Promise<void> {
     await prisma.refreshSession.updateMany({
       where: {
         userId,

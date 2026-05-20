@@ -1,11 +1,6 @@
-import {
-  PrismaClient,
-  Prisma,
-  User,
-} from "@prisma/client";
+import { PrismaClient, Prisma, User } from "@prisma/client";
 
-const prisma =
-  new PrismaClient();
+const prisma = new PrismaClient();
 
 interface CreateUserInput {
   email: string;
@@ -16,21 +11,18 @@ interface CreateUserInput {
 export class UserRepository {
   async createUser(
     data: CreateUserInput,
-    tx: Prisma.TransactionClient = prisma
+    tx: Prisma.TransactionClient = prisma,
   ): Promise<User> {
     return tx.user.create({
       data: {
         email: data.email,
-        passwordHash:
-          data.passwordHash,
+        passwordHash: data.passwordHash,
         name: data.name,
       },
     });
   }
 
-  async findByEmail(
-    email: string
-  ): Promise<User | null> {
+  async findByEmail(email: string): Promise<User | null> {
     return prisma.user.findUnique({
       where: {
         email,
@@ -38,9 +30,7 @@ export class UserRepository {
     });
   }
 
-  async findById(
-    id: string
-  ): Promise<User | null> {
+  async findById(id: string): Promise<User | null> {
     return prisma.user.findUnique({
       where: {
         id,
@@ -48,9 +38,7 @@ export class UserRepository {
     });
   }
 
-  async updateEmailVerification(
-    userId: string
-  ): Promise<User> {
+  async updateEmailVerification(userId: string): Promise<User> {
     return prisma.user.update({
       where: {
         id: userId,
@@ -61,9 +49,7 @@ export class UserRepository {
     });
   }
 
-  async deactivateUser(
-    userId: string
-  ): Promise<User> {
+  async deactivateUser(userId: string): Promise<User> {
     return prisma.user.update({
       where: {
         id: userId,

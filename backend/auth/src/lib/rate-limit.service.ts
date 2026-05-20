@@ -7,60 +7,38 @@ export class RateLimitService {
   /**
    * Check signup email rate limit
    */
-  static async checkSignupEmailLimit(
-    email: string
-  ) {
+  static async checkSignupEmailLimit(email: string) {
     /**
      * Existing lock?
      */
-    const locked =
-      await RateLimitRepository.isLocked(
-        email
-      );
+    const locked = await RateLimitRepository.isLocked(email);
 
     if (locked) {
-      throw new Error(
-        "Too many attempts. Try again later."
-      );
+      throw new Error("Too many attempts. Try again later.");
     }
 
     /**
      * Increment attempts
      */
     const attempts =
-      await RateLimitRepository.incrementSignupEmailAttempts(
-        email
-      );
+      await RateLimitRepository.incrementSignupEmailAttempts(email);
 
     /**
      * Apply lock
      */
-    if (
-      attempts >= MAX_SIGNUP_ATTEMPTS
-    ) {
-      await RateLimitRepository.lockIdentifier(
-        email,
-        LOCK_TIME_SECONDS
-      );
+    if (attempts >= MAX_SIGNUP_ATTEMPTS) {
+      await RateLimitRepository.lockIdentifier(email, LOCK_TIME_SECONDS);
 
-      throw new Error(
-        "Too many signup attempts"
-      );
+      throw new Error("Too many signup attempts");
     }
   }
 
   /**
    * Reset signup rate limit
    */
-  static async clearSignupLimit(
-    email: string
-  ) {
-    await RateLimitRepository.clearSignupAttempts(
-      email
-    );
+  static async clearSignupLimit(email: string) {
+    await RateLimitRepository.clearSignupAttempts(email);
 
-    await RateLimitRepository.clearLock(
-      email
-    );
+    await RateLimitRepository.clearLock(email);
   }
 }

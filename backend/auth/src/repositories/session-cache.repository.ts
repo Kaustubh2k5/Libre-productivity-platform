@@ -1,10 +1,8 @@
 import { redis } from "../lib/redis.js";
 
-const SESSION_PREFIX =
-  "session:refresh:";
+const SESSION_PREFIX = "session:refresh:";
 
-const REVOKED_PREFIX =
-  "session:revoked:";
+const REVOKED_PREFIX = "session:revoked:";
 
 export interface CachedSessionPayload {
   sessionId: string;
@@ -23,51 +21,35 @@ export class SessionCacheRepository {
   static async cacheSession(
     tokenHash: string,
     payload: CachedSessionPayload,
-    ttlSeconds: number
+    ttlSeconds: number,
   ): Promise<void> {
-    const key =
-      SESSION_PREFIX +
-      tokenHash;
+    const key = SESSION_PREFIX + tokenHash;
 
-    await redis.set(
-      key,
-      JSON.stringify(payload),
-      "EX",
-      ttlSeconds
-    );
+    await redis.set(key, JSON.stringify(payload), "EX", ttlSeconds);
   }
 
   /**
    * Retrieve cached refresh session
    */
   static async getCachedSession(
-    tokenHash: string
+    tokenHash: string,
   ): Promise<CachedSessionPayload | null> {
-    const key =
-      SESSION_PREFIX +
-      tokenHash;
+    const key = SESSION_PREFIX + tokenHash;
 
-    const data =
-      await redis.get(key);
+    const data = await redis.get(key);
 
     if (!data) {
       return null;
     }
 
-    return JSON.parse(
-      data
-    ) as CachedSessionPayload;
+    return JSON.parse(data) as CachedSessionPayload;
   }
 
   /**
    * Delete cached session
    */
-  static async deleteCachedSession(
-    tokenHash: string
-  ): Promise<void> {
-    const key =
-      SESSION_PREFIX +
-      tokenHash;
+  static async deleteCachedSession(tokenHash: string): Promise<void> {
+    const key = SESSION_PREFIX + tokenHash;
 
     await redis.del(key);
   }
@@ -77,32 +59,20 @@ export class SessionCacheRepository {
    */
   static async revokeSession(
     sessionId: string,
-    ttlSeconds: number
+    ttlSeconds: number,
   ): Promise<void> {
-    const key =
-      REVOKED_PREFIX +
-      sessionId;
+    const key = REVOKED_PREFIX + sessionId;
 
-    await redis.set(
-      key,
-      "revoked",
-      "EX",
-      ttlSeconds
-    );
+    await redis.set(key, "revoked", "EX", ttlSeconds);
   }
 
   /**
    * Check if session revoked
    */
-  static async isSessionRevoked(
-    sessionId: string
-  ): Promise<boolean> {
-    const key =
-      REVOKED_PREFIX +
-      sessionId;
+  static async isSessionRevoked(sessionId: string): Promise<boolean> {
+    const key = REVOKED_PREFIX + sessionId;
 
-    const exists =
-      await redis.exists(key);
+    const exists = await redis.exists(key);
 
     return exists === 1;
   }
@@ -110,12 +80,8 @@ export class SessionCacheRepository {
   /**
    * Get session TTL
    */
-  static async getSessionTTL(
-    tokenHash: string
-  ): Promise<number> {
-    const key =
-      SESSION_PREFIX +
-      tokenHash;
+  static async getSessionTTL(tokenHash: string): Promise<number> {
+    const key = SESSION_PREFIX + tokenHash;
 
     return redis.ttl(key);
   }
@@ -125,15 +91,10 @@ export class SessionCacheRepository {
    */
   static async extendSession(
     tokenHash: string,
-    ttlSeconds: number
+    ttlSeconds: number,
   ): Promise<void> {
-    const key =
-      SESSION_PREFIX +
-      tokenHash;
+    const key = SESSION_PREFIX + tokenHash;
 
-    await redis.expire(
-      key,
-      ttlSeconds
-    );
+    await redis.expire(key, ttlSeconds);
   }
 }

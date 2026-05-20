@@ -1,7 +1,10 @@
 import { Router } from "express";
-import {signupstart,verifySignup} from "../controllers/auth.controller.js";
+import { signupstart, verifySignup } from "../controllers/auth.controller.js";
 import { validate } from "../middlewares/validate.middleware.js";
-import {signupStartSchema, signupVerifySchema } from "../schemas/auth.schema.js";
+import {
+  signupStartSchema,
+  signupVerifySchema,
+} from "../schemas/auth.schema.js";
 import { signupRateLimitMiddleware } from "../middlewares/rate-limit.middleware.js";
 
 const router = Router();
@@ -17,7 +20,7 @@ router.post(
   "/signup/start",
   validate(signupStartSchema),
   signupRateLimitMiddleware,
-  signupstart
+  signupstart,
 );
 
 /**
@@ -33,7 +36,7 @@ router.post(
   "/signup/verify",
   validate(signupVerifySchema),
   signupRateLimitMiddleware,
-  verifySignup
+  verifySignup,
 );
 
 export default router;

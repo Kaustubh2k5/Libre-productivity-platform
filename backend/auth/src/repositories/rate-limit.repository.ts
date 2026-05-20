@@ -16,7 +16,7 @@ export class RateLimitRepository {
    */
   static async incrementSignupEmailAttempts(
     email: string,
-    ttlSeconds = 900
+    ttlSeconds = 900,
   ): Promise<number> {
     const key = SIGNUP_EMAIL_PREFIX + email;
 
@@ -34,7 +34,7 @@ export class RateLimitRepository {
    */
   static async incrementSignupIpAttempts(
     ip: string,
-    ttlSeconds = 900
+    ttlSeconds = 900,
   ): Promise<number> {
     const key = SIGNUP_IP_PREFIX + ip;
 
@@ -52,7 +52,7 @@ export class RateLimitRepository {
    */
   static async incrementLoginEmailAttempts(
     email: string,
-    ttlSeconds = 900
+    ttlSeconds = 900,
   ): Promise<number> {
     const key = LOGIN_EMAIL_PREFIX + email;
 
@@ -70,7 +70,7 @@ export class RateLimitRepository {
    */
   static async incrementLoginIpAttempts(
     ip: string,
-    ttlSeconds = 900
+    ttlSeconds = 900,
   ): Promise<number> {
     const key = LOGIN_IP_PREFIX + ip;
 
@@ -86,9 +86,7 @@ export class RateLimitRepository {
   /**
    * Get signup attempts by email
    */
-  static async getSignupEmailAttempts(
-    email: string
-  ): Promise<number> {
+  static async getSignupEmailAttempts(email: string): Promise<number> {
     const key = SIGNUP_EMAIL_PREFIX + email;
 
     const attempts = await redis.get(key);
@@ -99,9 +97,7 @@ export class RateLimitRepository {
   /**
    * Get signup attempts by IP
    */
-  static async getSignupIpAttempts(
-    ip: string
-  ): Promise<number> {
+  static async getSignupIpAttempts(ip: string): Promise<number> {
     const key = SIGNUP_IP_PREFIX + ip;
 
     const attempts = await redis.get(key);
@@ -114,7 +110,7 @@ export class RateLimitRepository {
    */
   static async lockIdentifier(
     identifier: string,
-    ttlSeconds = 900
+    ttlSeconds = 900,
   ): Promise<void> {
     const key = LOCK_PREFIX + identifier;
 
@@ -124,9 +120,7 @@ export class RateLimitRepository {
   /**
    * Check if identifier is locked
    */
-  static async isLocked(
-    identifier: string
-  ): Promise<boolean> {
+  static async isLocked(identifier: string): Promise<boolean> {
     const key = LOCK_PREFIX + identifier;
 
     const exists = await redis.exists(key);
@@ -137,9 +131,7 @@ export class RateLimitRepository {
   /**
    * Remove lock manually
    */
-  static async clearLock(
-    identifier: string
-  ): Promise<void> {
+  static async clearLock(identifier: string): Promise<void> {
     const key = LOCK_PREFIX + identifier;
 
     await redis.del(key);
@@ -148,9 +140,7 @@ export class RateLimitRepository {
   /**
    * Clear signup attempts
    */
-  static async clearSignupAttempts(
-    email: string
-  ): Promise<void> {
+  static async clearSignupAttempts(email: string): Promise<void> {
     const emailKey = SIGNUP_EMAIL_PREFIX + email;
 
     await redis.del(emailKey);
@@ -159,9 +149,7 @@ export class RateLimitRepository {
   /**
    * Clear login attempts
    */
-  static async clearLoginAttempts(
-    email: string
-  ): Promise<void> {
+  static async clearLoginAttempts(email: string): Promise<void> {
     const emailKey = LOGIN_EMAIL_PREFIX + email;
 
     await redis.del(emailKey);

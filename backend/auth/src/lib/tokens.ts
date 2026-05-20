@@ -10,16 +10,10 @@ interface AccessTokenPayload {
 /**
  * Generate JWT access token
  */
-export const generateAccessToken = (
-  payload: AccessTokenPayload
-) => {
-  return jwt.sign(
-    payload,
-    process.env.JWT_ACCESS_SECRET!,
-    {
-      expiresIn: "15m",
-    }
-  );
+export const generateAccessToken = (payload: AccessTokenPayload) => {
+  return jwt.sign(payload, process.env.JWT_ACCESS_SECRET!, {
+    expiresIn: "15m",
+  });
 };
 
 /**

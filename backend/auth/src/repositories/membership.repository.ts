@@ -1,7 +1,4 @@
-import {
-  Prisma,
-  Membership,
-} from "@prisma/client";
+import { Prisma, Membership } from "@prisma/client";
 
 import { prisma } from "../lib/db.js";
 
@@ -13,7 +10,7 @@ interface CreateMembershipInput {
 export class MembershipRepository {
   async createMembership(
     data: CreateMembershipInput,
-    tx: Prisma.TransactionClient = prisma
+    tx: Prisma.TransactionClient = prisma,
   ): Promise<Membership> {
     return tx.membership.create({
       data: {
@@ -25,7 +22,7 @@ export class MembershipRepository {
 
   async findMembership(
     userId: string,
-    appId: string
+    appId: string,
   ): Promise<Membership | null> {
     return prisma.membership.findUnique({
       where: {
@@ -37,9 +34,7 @@ export class MembershipRepository {
     });
   }
 
-  async getUserMemberships(
-    userId: string
-  ): Promise<Membership[]> {
+  async getUserMemberships(userId: string): Promise<Membership[]> {
     return prisma.membership.findMany({
       where: {
         userId,
@@ -47,10 +42,7 @@ export class MembershipRepository {
     });
   }
 
-  async removeMembership(
-    userId: string,
-    appId: string
-  ): Promise<Membership> {
+  async removeMembership(userId: string, appId: string): Promise<Membership> {
     return prisma.membership.delete({
       where: {
         userId_appId: {

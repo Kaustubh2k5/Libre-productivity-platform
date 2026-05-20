@@ -19,24 +19,17 @@ export class OtpRepository {
   static async storeOtp(
     email: string,
     payload: OtpPayload,
-    ttlSeconds: number
+    ttlSeconds: number,
   ): Promise<void> {
     const key = OTP_PREFIX + email;
 
-    await redis.set(
-      key,
-      JSON.stringify(payload),
-      "EX",
-      ttlSeconds
-    );
+    await redis.set(key, JSON.stringify(payload), "EX", ttlSeconds);
   }
 
   /**
    * Retrieve OTP payload
    */
-  static async getOtp(
-    email: string
-  ): Promise<OtpPayload | null> {
+  static async getOtp(email: string): Promise<OtpPayload | null> {
     const key = OTP_PREFIX + email;
 
     const data = await redis.get(key);
@@ -71,7 +64,7 @@ export class OtpRepository {
    */
   static async incrementOtpAttempts(
     email: string,
-    ttlSeconds = 300
+    ttlSeconds = 300,
   ): Promise<number> {
     const key = OTP_ATTEMPT_PREFIX + email;
 
@@ -88,9 +81,7 @@ export class OtpRepository {
   /**
    * Get current OTP verification attempts
    */
-  static async getOtpAttempts(
-    email: string
-  ): Promise<number> {
+  static async getOtpAttempts(email: string): Promise<number> {
     const key = OTP_ATTEMPT_PREFIX + email;
 
     const attempts = await redis.get(key);
@@ -101,9 +92,7 @@ export class OtpRepository {
   /**
    * Clear OTP verification attempts
    */
-  static async clearOtpAttempts(
-    email: string
-  ): Promise<void> {
+  static async clearOtpAttempts(email: string): Promise<void> {
     const key = OTP_ATTEMPT_PREFIX + email;
 
     await redis.del(key);

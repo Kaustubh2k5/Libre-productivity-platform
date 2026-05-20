@@ -1,15 +1,18 @@
 import { Request, Response, NextFunction } from "express";
-import {signupStartService,signupVerifyService} from "../modules/signup/services/signup.service.js";
+import {
+  signupStartService,
+  signupVerifyService,
+} from "../modules/signup/services/signup.service.js";
 
 /**
  * STEP 1
  * Initiate signup
-*/
+ */
 
 export const signupstart = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { email, password, clientId } = req.body;
@@ -36,11 +39,10 @@ export const signupstart = async (
 export const verifySignup = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { email, otp, clientId } = req.body;
-
 
     const result = await signupVerifyService({
       email,
