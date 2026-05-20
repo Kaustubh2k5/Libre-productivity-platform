@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthLayout from '../components/AuthLayout';
 import { User, Mail, Lock, CheckCircle2, Circle, Eye } from 'lucide-react';
-import { handleSignup } from '../utils';
+import { handleSignup } from '../../../lib/utils';
 import axios from 'axios';
 
 // define axios instance for requests

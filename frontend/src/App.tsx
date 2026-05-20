@@ -1,24 +1,40 @@
 import { Routes, Route } from 'react-router-dom';
 
-import { LandingPage } from './pages/landing/pages/landing-page';
+import { LandingPage } from './app/layouts/landing-page';
 
-import Auth from './pages/auth/Auth';
-import AuthLanding from './pages/auth/pages/AuthLanding';
-import LoginPage from './pages/auth/pages/Login';
-import SignupPage from './pages/auth/pages/Signup';
-import ForgotPasswordPage from './pages/auth/pages/Forgotpage';
+import Auth from './app/layouts/Auth';
+import OnboardingLayout from './app/layouts/OnboardingLayout';
+
+import AuthLanding from './features/auth/pages/AuthLanding';
+import LoginPage from './features/auth/pages/Login';
+import SignupPage from './features/auth/pages/Signup';
+import ForgotPasswordPage from './features/auth/pages/Forgotpage';
+
+import Welcome from './features/onboarding/pages/Welcome';
+import Profile from './features/onboarding/pages/Profile';
+import FocusAssessment from './features/onboarding/pages/FocusAssessment';
+import GenerateSystem from './features/onboarding/pages/GenerateSystem';
+
 function App() {
   return (
     <Routes>
-      {/* Main Landing */}
+      {/* Landing */}
       <Route path="/" element={<LandingPage />} />
 
-      {/* Auth Parent */}
+      {/* Auth */}
       <Route path="/auth" element={<Auth />}>
         <Route index element={<AuthLanding />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="signup" element={<SignupPage />} />
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
+      </Route>
+
+      {/* Onboarding */}
+      <Route path="/onboarding" element={<OnboardingLayout />}>
+        <Route index element={<Welcome />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="focus-assessment" element={<FocusAssessment />} />
+        <Route path="generate-system" element={<GenerateSystem />} />
       </Route>
     </Routes>
   );

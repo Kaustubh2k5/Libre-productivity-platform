@@ -1,5 +1,5 @@
-import { LibreNavbar } from '../components/navbar';
-import { Button } from '../../../shared/components/ui/buttons';
+import { LibreNavbar } from '../../features/landing/components/navbar';
+import { Button } from '../../shared/components/ui/buttons';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 

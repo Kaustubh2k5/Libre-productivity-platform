@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthLayout from '../components/AuthLayout';
 import { Mail, Lock, Eye } from 'lucide-react';
-import { handleLogin } from '../utils';
+import { handleLogin } from '../../../lib/utils';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
