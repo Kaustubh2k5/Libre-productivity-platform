@@ -1,6 +1,6 @@
 import { assessmentQuestions } from '../constants/assessmentQuestions';
 import { useNavigate } from 'react-router-dom';
-import { useOnboardingStore } from '../store/onboardingStore';
+import { useOnboardingStore } from '../store/onBoardingStore';
 import { useState } from 'react';
 
 export default function FocusAssessment() {

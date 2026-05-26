@@ -108,7 +108,7 @@ nx-cache/
 # Cloud
 # =========================
 exec -l /
-*.tfvars
+terraform.tfvars
 *.tfstate
 .tfstate.backup
 .terraform/

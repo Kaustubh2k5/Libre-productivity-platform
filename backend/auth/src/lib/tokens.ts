@@ -19,7 +19,6 @@ export const generateAccessToken = (payload: AccessTokenPayload) => {
 /**
  * Generate opaque refresh token
  */
-
 export const generateRefreshToken = () => {
   return crypto.randomBytes(64).toString("hex");
 };

@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { profileSchema } from '../schemas/onboarding.schema';
 import type { ProfileSchemaType } from '../schemas/onboarding.schema';
-import { useOnboardingStore } from '../store/onboardingStore';
+import { useOnboardingStore } from '../store/onBoardingStore';
 import { useNavigate } from 'react-router-dom';
 
 export default function Profile() {
