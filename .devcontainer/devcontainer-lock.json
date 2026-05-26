@@ -15,15 +15,15 @@
       "resolved": "ghcr.io/devcontainers/features/github-cli@sha256:d22f50b70ed75339b4eed1ba9ecde3a1791f90e88d37936517e3bace0bbad671",
       "integrity": "sha256:d22f50b70ed75339b4eed1ba9ecde3a1791f90e88d37936517e3bace0bbad671"
     },
-    "ghcr.io/devcontainers/features/terraform:1": {
-      "version": "1.4.2",
-      "resolved": "ghcr.io/devcontainers/features/terraform@sha256:250d08e39c99d9e959e091e74527c22c04eeae728b424da99f002423c7902f82",
-      "integrity": "sha256:250d08e39c99d9e959e091e74527c22c04eeae728b424da99f002423c7902f82"
+    "ghcr.io/devcontainers/features/terraform:": {
+      "version": "1.4.3",
+      "resolved": "ghcr.io/devcontainers/features/terraform@sha256:503d0888b3a43a32335e08cd4477f8c4629404ad83f6a36f0e0fee7f567c06c7",
+      "integrity": "sha256:503d0888b3a43a32335e08cd4477f8c4629404ad83f6a36f0e0fee7f567c06c7"
     },
     "ghcr.io/helpers4/devcontainer/vite-plus:1": {
-      "version": "1.0.3",
-      "resolved": "ghcr.io/helpers4/devcontainer/vite-plus@sha256:7a28985c86e4252cf6106186e6bc5aca73fb1e4ad9d3fcdf0d5eec42728af61b",
-      "integrity": "sha256:7a28985c86e4252cf6106186e6bc5aca73fb1e4ad9d3fcdf0d5eec42728af61b"
+      "version": "1.0.4",
+      "resolved": "ghcr.io/helpers4/devcontainer/vite-plus@sha256:2ae2d1299093fa95be3100a2fe5f562c2ba7b37c52aac2f004673508baac7caf",
+      "integrity": "sha256:2ae2d1299093fa95be3100a2fe5f562c2ba7b37c52aac2f004673508baac7caf"
     }
   }
 }
