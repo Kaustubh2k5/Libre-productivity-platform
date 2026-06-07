@@ -1,11 +1,21 @@
 import { Router } from "express";
-import { signupstart, verifySignup } from "../controllers/auth.controller.js";
+import {
+  signupstart,
+  verifySignup,
+  signin,
+  signout,
+} from "../controllers/auth.controller.js";
 import { validate } from "../middlewares/validate.middleware.js";
 import {
   signupStartSchema,
   signupVerifySchema,
+  signinSchema,
+  signoutSchema,
 } from "../schemas/auth.schema.js";
-import { signupRateLimitMiddleware } from "../middlewares/rate-limit.middleware.js";
+import {
+  signupRateLimitMiddleware,
+  signinRateLimitMiddleware,
+} from "../middlewares/rate-limit.middleware.js";
 
 const router = Router();
 
@@ -38,5 +48,27 @@ router.post(
   signupRateLimitMiddleware,
   verifySignup,
 );
+
+/**
+ * Sign in user and create session
+ * - validate credentials
+ * - check membership
+ * - generate tokens
+ * - cache session
+ */
+router.post(
+  "/signin",
+  validate(signinSchema),
+  signinRateLimitMiddleware,
+  signin,
+);
+
+/**
+ * Sign out user
+ * - validate refresh token
+ * - revoke refresh session
+ * - remove cached session
+ */
+router.post("/signout", validate(signoutSchema), signout);
 
 export default router;

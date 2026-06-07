@@ -14,3 +14,16 @@ export const signupVerifySchema = z.object({
 
   clientId: z.string().min(1),
 });
+
+export const signinSchema = z.object({
+  email: z.string().email(),
+
+  password: z.string().min(8),
+
+  clientId: z.string().min(1),
+});
+
+export const signoutSchema = z.object({
+  refreshToken: z.string().min(1),
+});
+

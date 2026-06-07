@@ -24,3 +24,27 @@ export const signupRateLimitMiddleware = async (
     });
   }
 };
+
+export const signinRateLimitMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { email } = req.body;
+
+    /**
+     * check login rate limit
+     */
+    await RateLimitService.checkLoginLimit(email);
+
+    next();
+  } catch (error) {
+    return res.status(429).json({
+      success: false,
+
+      message: error instanceof Error ? error.message : "Too many requests",
+    });
+  }
+};
+
