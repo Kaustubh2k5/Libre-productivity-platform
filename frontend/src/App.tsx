@@ -14,6 +14,7 @@ import Welcome from './features/onboarding/pages/Welcome';
 import Profile from './features/onboarding/pages/Profile';
 import FocusAssessment from './features/onboarding/pages/FocusAssessment';
 import GenerateSystem from './features/onboarding/pages/GenerateSystem';
+import SandboxShell from './features/sandbox/pages/SandBoxPage';
 
 function App() {
   return (
@@ -36,6 +37,8 @@ function App() {
         <Route path="focus-assessment" element={<FocusAssessment />} />
         <Route path="generate-system" element={<GenerateSystem />} />
       </Route>
+      {/* Sandbox */}
+      <Route path="sandbox" element={<SandboxShell />} />
     </Routes>
   );
 }
