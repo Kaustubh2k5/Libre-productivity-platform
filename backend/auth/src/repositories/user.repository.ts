@@ -1,6 +1,5 @@
 import { PrismaClient, Prisma, User } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/db.js";
 
 interface CreateUserInput {
   email: string;
