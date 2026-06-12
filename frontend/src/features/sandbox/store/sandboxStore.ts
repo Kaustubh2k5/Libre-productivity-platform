@@ -14,12 +14,14 @@ import {
   appendRow,
   appendColumn,
   updateCell,
-  deleteRow,
-  createCustomTable,
+  deleteRow
+} from '../utils/tableMutations';
+import {
   createDefaultTable,
+  createGoalTable,
   MAX_ROWS,
   MAX_COLS
-} from '../utils/tableMutations';
+} from '../utils/tableFactories';
 
 export interface SandboxStoreState {
   tables: SandboxTable[];
@@ -69,7 +71,7 @@ const useSandboxStoreBase = create<SandboxStoreState>()(
         }
 
         const uniqueName = getUniqueTableName(validatedName, tables);
-        const newTable = createCustomTable(uniqueName, description);
+        const newTable = createGoalTable(uniqueName, description);
 
         set({
           tables: [...tables, newTable],

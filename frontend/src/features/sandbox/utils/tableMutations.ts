@@ -1,7 +1,5 @@
 import type { SandboxTable, SandboxColumn } from '../types/sandbox.types';
-
-export const MAX_ROWS = 10;
-export const MAX_COLS = 5;
+import { MAX_ROWS, MAX_COLS } from './tableFactories';
 
 export function createNewColumnId(): string {
   return `col_${Date.now()}`;
