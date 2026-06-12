@@ -1,5 +1,11 @@
 import { motion } from 'framer-motion';
+import { buildOnboardingSubmissionPayload, useOnboardingStore } from '../store/onBoardingStore';
+
 export default function GenerateSystem() {
+  const profile = useOnboardingStore((state) => state.profile);
+  const assessment = useOnboardingStore((state) => state.assessment);
+  const submissionPayload = buildOnboardingSubmissionPayload(profile, assessment);
+
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
       <div className="text-center max-w-2xl">
@@ -31,6 +37,10 @@ export default function GenerateSystem() {
           Analyzing behavioral patterns, energy rhythms, focus depth,execution tendencies, and
           workflow architecture.
         </motion.p>
+
+        <pre className="mt-10 max-h-72 overflow-auto rounded-2xl border border-white/10 bg-black/40 p-5 text-left text-xs leading-relaxed text-zinc-300">
+          {JSON.stringify(submissionPayload, null, 2)}
+        </pre>
       </div>
     </div>
   );

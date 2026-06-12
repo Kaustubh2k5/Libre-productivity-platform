@@ -6,9 +6,11 @@ import { useState } from 'react';
 export default function FocusAssessment() {
   const navigate = useNavigate();
 
-  const [answers, setAnswers] = useState<Record<string, number>>({});
-
+  const savedAssessment = useOnboardingStore((state) => state.assessment);
   const setAssessment = useOnboardingStore((state) => state.setAssessment);
+  const [answers, setAnswers] = useState<Record<string, number>>(savedAssessment);
+
+  const isComplete = assessmentQuestions.every((question) => answers[question.id] !== undefined);
 
   function handleSelect(questionId: string, index: number) {
     setAnswers((prev) => ({
@@ -18,6 +20,10 @@ export default function FocusAssessment() {
   }
 
   function handleContinue() {
+    if (!isComplete) {
+      return;
+    }
+
     setAssessment(answers);
     navigate('/onboarding/generate-system');
   }
@@ -62,7 +68,8 @@ export default function FocusAssessment() {
 
         <button
           onClick={handleContinue}
-          className="mt-10 w-full py-5 rounded-2xl bg-white text-black font-medium"
+          disabled={!isComplete}
+          className="mt-10 w-full py-5 rounded-2xl bg-white text-black font-medium disabled:cursor-not-allowed disabled:opacity-50"
         >
           Generate My System
         </button>

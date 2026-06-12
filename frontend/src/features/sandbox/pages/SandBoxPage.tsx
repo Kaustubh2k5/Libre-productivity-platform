@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSandboxStore } from '../store/sandboxStore';
 import { useActiveTable } from '../hooks/useActiveTable';
 import { useKeyboardSave } from '../hooks/useKeyboardSave';
@@ -24,26 +23,26 @@ function SandboxShell() {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-[#050507] text-white flex flex-col justify-between font-sans selection:bg-red-500/20 selection:text-red-200">
-      
       {/* 0. DEEP COSMIC CANVAS SCI-FI STARFIELD WITH DUST NOISE */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
         {/* Ambient starfield background pattern */}
-        <div 
-          className="absolute inset-x-0 inset-y-0 opacity-[0.02]" 
-          style={{ 
+        <div
+          className="absolute inset-x-0 inset-y-0 opacity-[0.02]"
+          style={{
             backgroundImage: `radial-gradient(ellipse at center, rgba(255, 255, 255, 0.15) 0%, transparent 80%)`,
-            backgroundSize: '24px 24px'
-          }} 
+            backgroundSize: '24px 24px',
+          }}
         />
         {/* Subtle grid mesh overlays to evoke modular design schematic vibes */}
-        <div 
+        <div
           className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)]"
           style={{ backgroundSize: '40px 40px' }}
         />
-        <div 
+        <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 50% 50%, rgba(220, 38, 38, 0.03) 0%, rgba(0, 0, 0, 0) 70%)'
+            background:
+              'radial-gradient(circle at 50% 50%, rgba(220, 38, 38, 0.03) 0%, rgba(0, 0, 0, 0) 70%)',
           }}
         />
       </div>
@@ -70,11 +69,7 @@ function SandboxShell() {
 
       {/* MAIN INFINITE VIEWPORT PANEL FOR SANDBOX GRID */}
       <main className="flex-1 relative z-10 w-full overflow-hidden select-none inline-flex items-center justify-center p-6 md:p-12">
-        {tables.length === 0 || !activeTable ? (
-          <EmptyState />
-        ) : (
-          <SandboxTable />
-        )}
+        {tables.length === 0 || !activeTable ? <EmptyState /> : <SandboxTable />}
       </main>
 
       {/* SUBMIT BUTTON */}
@@ -88,7 +83,6 @@ function SandboxShell() {
 
       {/* Toast Notification HUD alert */}
       <ToastSystem />
-
     </div>
   );
 }
