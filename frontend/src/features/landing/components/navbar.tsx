@@ -11,7 +11,7 @@ export const LibreNavbar = () => {
 
   return (
     <nav
-      className={`fixed top-8 left-1/2 -translate-x-1/2 z-[1000] w-[90%] max-w-5xl transition-all duration-500`}
+      className={`fixed top-8 left-1/2 -translate-x-1/2 z-1000 w-[90%] max-w-5xl transition-all duration-500`}
     >
       <div
         className={`glass px-8 py-3 rounded-full flex items-center justify-between backdrop-blur-3xl bg-black/20 border-white/5`}

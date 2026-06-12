@@ -59,11 +59,11 @@ export default function LoginPage() {
         </div>
 
         <div className="relative flex items-center gap-4">
-          <div className="flex-1 h-[1px] bg-white/[0.05]"></div>
+          <div className="flex-1 h-px bg-white/5"></div>
           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 whitespace-nowrap">
             or continue with email
           </span>
-          <div className="flex-1 h-[1px] bg-white/[0.05]"></div>
+          <div className="flex-1 h-px bg-white/5"></div>
         </div>
 
         <form className="space-y-4" onSubmit={handleLoginForm}>

@@ -1,13 +1,12 @@
 import type { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import libreLogo from '../../../assets/libre.svg';
 interface AuthLayoutProps {
   children: ReactNode;
   title: string;
   subtitle?: string;
 }
-
+const libreLogo = new URL('../../../assets/libre.svg', import.meta.url).href;
 export default function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
   return (
     <div className="min-h-screen md:h-screen flex flex-col md:flex-row bg-black overflow-x-hidden">
@@ -16,7 +15,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
         {/* Mobile-only Background Gradients */}
         <div className="absolute inset-0 md:hidden pointer-events-none z-0">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-[120%] bg-[radial-gradient(circle_at_top,rgba(230,0,0,0.45)_0%,transparent_75%)] opacity-70" />
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[150%] h-[100%] bg-[radial-gradient(circle_at_bottom,rgba(255,255,255,0.06)_0%,transparent_70%)] opacity-50" />
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[150%] h-full bg-[radial-gradient(circle_at_bottom,rgba(255,255,255,0.06)_0%,transparent_70%)] opacity-50" />
         </div>
 
         {/* Mobile Return to Home */}
@@ -87,7 +86,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
                   </p>
 
                   {/* Steps List */}
-                  <div className="w-full space-y-2 max-w-[340px]">
+                  <div className="w-full space-y-2 max-w-85">
                     {[
                       { id: 1, label: 'REGISTER', active: true },
                       { id: 2, label: 'USER ONBOARDING', active: false },
@@ -98,7 +97,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
                         className={`flex items-center gap-3 p-3.5 rounded-[1.25rem] border transition-all duration-700 ${
                           step.active
                             ? 'bg-white text-black border-white shadow-[0_20px_60px_rgba(255,255,255,0.12)] scale-[1.02]'
-                            : 'bg-white/[0.02] text-white/40 border-white/[0.03]'
+                            : 'bg-white/2 text-white/40 border-white/3'
                         }`}
                       >
                         <div
@@ -129,7 +128,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
                     </span>
                     <motion.div
                       whileHover={{ y: 8, boxShadow: '0 0 30px rgba(255,255,255,0.25)' }}
-                      className="w-14 h-14 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-500 backdrop-blur-xl bg-white/[0.03]"
+                      className="w-14 h-14 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-500 backdrop-blur-xl bg-white/3"
                     >
                       <span className="text-xl">↓</span>
                     </motion.div>
@@ -155,7 +154,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
                   <p className="text-white/30 text-lg leading-relaxed mb-10 font-light max-w-md mx-auto">
                     We value your privacy, and ensure that it is completely secure. To know more,
                     read our{' '}
-                    <Link to="#" className="text-[#e60000] hover:text-[#ff1a1a] transition-colors">
+                    <Link to="#" className="text-accent hover:text-[#ff1a1a] transition-colors">
                       blog
                     </Link>
                     .
@@ -179,7 +178,7 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
                 >
                   <motion.div
                     whileHover={{ y: -8, boxShadow: '0 0 30px rgba(255,255,255,0.2)' }}
-                    className="w-14 h-14 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-500 bg-white/[0.03]"
+                    className="w-14 h-14 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-500 bg-white/3"
                   >
                     <span className="text-xl">↑</span>
                   </motion.div>
