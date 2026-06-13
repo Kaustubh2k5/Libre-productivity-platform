@@ -1,7 +1,5 @@
 packages:
   - "frontend"
-  - "backend/auth"
-  - "backend/onboarding"
 
 onlyBuiltDependencies:
   - esbuild

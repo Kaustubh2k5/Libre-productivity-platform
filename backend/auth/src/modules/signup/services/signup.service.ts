@@ -12,6 +12,7 @@ import {
 import { sendOtpEmail } from "../../../lib/mailer.service.js";
 import { prisma } from "../../../lib/db.js";
 import { Prisma } from "@prisma/client";
+
 const userRepository = new UserRepository();
 
 const appRepository = new AppRepository();

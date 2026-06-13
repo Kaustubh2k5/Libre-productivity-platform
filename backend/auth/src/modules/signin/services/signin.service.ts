@@ -4,10 +4,7 @@ import { MembershipRepository } from "../../../repositories/membership.repositor
 import { RefreshSessionRepository } from "../../../repositories/refresh-session.repository.js";
 import { SessionCacheRepository } from "../../../repositories/session-cache.repository.js";
 import { comparePassword, hashToken } from "../../../lib/bcrypt.js";
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from "../../../lib/tokens.js";
+import {generateAccessToken,generateRefreshToken,} from "../../../lib/tokens.js";
 import { RateLimitService } from "../../../lib/rate-limit.service.js";
 
 const userRepository = new UserRepository();

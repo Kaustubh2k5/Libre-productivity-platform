@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { verifyToken }
+import { verifyAccessToken }
 from "../middlewares/auth.middleware.js";
 
 import { validate }
@@ -16,7 +16,7 @@ const router = Router();
 
 router.post(
     "/",
-    verifyToken,
+    verifyAccessToken,
     validate(onboardingSchema),
     onboardController
 );
