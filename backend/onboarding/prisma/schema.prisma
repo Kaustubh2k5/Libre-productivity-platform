@@ -13,9 +13,13 @@ datasource db {
 
 model UserCore {
   uid        String   @id
-  name       String
-  dob        DateTime
+
+  fullName   String
+  dateOfBirth DateTime
   occupation String
+
+  profileCompleted     Boolean @default(false)
+  constraintsCompleted Boolean @default(false)
 
   behaviour UserBehaviourCore?
 
@@ -25,13 +29,17 @@ model UserCore {
 model UserBehaviourCore {
   uid String @id
 
-  avgEnergyLevel    Int
-  avgProductiveTime Int
+  focusDuration     String
+  distractionLevel  String
+  energyConsistency String
+  taskInitiation    String
+  recoveryPattern   String
 
-  initialisationArchetype String
-  recoveryArchetype       String
-
-  user UserCore @relation(fields: [uid], references: [uid], onDelete: Cascade)
+  user UserCore @relation(
+    fields: [uid],
+    references: [uid],
+    onDelete: Cascade
+  )
 }
 
 model UserConstraint {
@@ -39,12 +47,14 @@ model UserConstraint {
 
   uid String
 
-  constraintTitle String
-  description     String?
+  name String
 
-  days      Json
   startTime String
-  endTime   String
+  endTime String
 
-  user UserCore @relation(fields: [uid], references: [uid], onDelete: Cascade)
+  user UserCore @relation(
+    fields: [uid],
+    references: [uid],
+    onDelete: Cascade
+  )
 }

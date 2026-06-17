@@ -1,31 +1,31 @@
 export async function replaceConstraints(
-    tx: any,
-    uid: string,
-    constraints: any[]
+  tx: any,
+  uid: string,
+  constraints: any[],
 ) {
+  await tx.userConstraint.deleteMany({
+    where: { uid },
+  });
 
-    await tx.userConstraint.deleteMany({
-        where: { uid }
-    });
-
+  if (constraints.length > 0) {
     await tx.userConstraint.createMany({
-        data: constraints.map(c => ({
-            uid,
+      data: constraints.map((constraint) => ({
+        uid,
 
-            constraintTitle:
-                c.title,
+        name: constraint.name,
 
-            description:
-                c.description,
+        startTime: constraint.startTime,
 
-            days:
-                c.days,
-
-            startTime:
-                c.startTime,
-
-            endTime:
-                c.endTime
-        }))
+        endTime: constraint.endTime,
+      })),
     });
+  }
+
+  await tx.userCore.update({
+    where: { uid },
+
+    data: {
+      constraintsCompleted: true,
+    },
+  });
 }
