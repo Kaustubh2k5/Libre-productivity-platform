@@ -1,10 +1,42 @@
 import { motion } from 'framer-motion';
-import { buildOnboardingSubmissionPayload, useOnboardingStore } from '../store/onBoardingStore';
+import { useEffect, useMemo, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  buildConstraintsSubmissionPayload,
+  buildOnboardingSubmissionPayload,
+  useOnboardingStore,
+} from '../store/onBoardingStore';
 
 export default function GenerateSystem() {
+  const navigate = useNavigate();
+  const hasLoggedPayloads = useRef(false);
   const profile = useOnboardingStore((state) => state.profile);
   const assessment = useOnboardingStore((state) => state.assessment);
-  const submissionPayload = buildOnboardingSubmissionPayload(profile, assessment);
+  const constraints = useOnboardingStore((state) => state.constraints);
+  const onboardingPayload = useMemo(
+    () => buildOnboardingSubmissionPayload(profile, assessment),
+    [assessment, profile],
+  );
+  const constraintsPayload = useMemo(
+    () => buildConstraintsSubmissionPayload(constraints),
+    [constraints],
+  );
+
+  useEffect(() => {
+    if (hasLoggedPayloads.current) {
+      return;
+    }
+
+    hasLoggedPayloads.current = true;
+    console.log('Onboarding payload', onboardingPayload);
+    console.log('Constraints payload', constraintsPayload);
+
+    const redirectTimer = window.setTimeout(() => {
+      navigate('/sandbox');
+    }, 4000);
+
+    return () => window.clearTimeout(redirectTimer);
+  }, [constraintsPayload, navigate, onboardingPayload]);
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
@@ -37,10 +69,6 @@ export default function GenerateSystem() {
           Analyzing behavioral patterns, energy rhythms, focus depth,execution tendencies, and
           workflow architecture.
         </motion.p>
-
-        <pre className="mt-10 max-h-72 overflow-auto rounded-2xl border border-white/10 bg-black/40 p-5 text-left text-xs leading-relaxed text-zinc-300">
-          {JSON.stringify(submissionPayload, null, 2)}
-        </pre>
       </div>
     </div>
   );

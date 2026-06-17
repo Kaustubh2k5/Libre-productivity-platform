@@ -25,7 +25,7 @@ export default function FocusAssessment() {
     }
 
     setAssessment(answers);
-    navigate('/onboarding/generate-system');
+    navigate('/onboarding/constraints');
   }
 
   return (
@@ -71,7 +71,7 @@ export default function FocusAssessment() {
           disabled={!isComplete}
           className="mt-10 w-full py-5 rounded-2xl bg-white text-black font-medium disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Generate My System
+          Continue
         </button>
       </div>
     </div>

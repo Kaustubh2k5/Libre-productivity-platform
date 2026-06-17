@@ -13,6 +13,7 @@ import ForgotPasswordPage from './features/auth/pages/Forgotpage';
 import Welcome from './features/onboarding/pages/Welcome';
 import Profile from './features/onboarding/pages/Profile';
 import FocusAssessment from './features/onboarding/pages/FocusAssessment';
+import Constraints from './features/onboarding/pages/Constraints';
 import GenerateSystem from './features/onboarding/pages/GenerateSystem';
 import SandboxShell from './features/sandbox/pages/SandBoxPage';
 
@@ -35,6 +36,7 @@ function App() {
         <Route index element={<Welcome />} />
         <Route path="profile" element={<Profile />} />
         <Route path="focus-assessment" element={<FocusAssessment />} />
+        <Route path="constraints" element={<Constraints />} />
         <Route path="generate-system" element={<GenerateSystem />} />
       </Route>
       {/* Sandbox */}

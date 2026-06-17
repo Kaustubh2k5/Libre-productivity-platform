@@ -7,7 +7,9 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Profile() {
   const navigate = useNavigate();
+  const profile = useOnboardingStore((state) => state.profile);
   const setProfile = useOnboardingStore((state) => state.setProfile);
+  const today = new Date().toISOString().split('T')[0];
 
   const {
     register,
@@ -15,6 +17,7 @@ export default function Profile() {
     formState: { errors },
   } = useForm<ProfileSchemaType>({
     resolver: zodResolver(profileSchema),
+    defaultValues: profile,
   });
 
   function onSubmit(data: ProfileSchemaType) {
@@ -45,11 +48,12 @@ export default function Profile() {
 
           <div>
             <input
-              {...register('age')}
-              placeholder="Age"
-              className="w-full bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none"
+              {...register('dateOfBirth')}
+              type="date"
+              max={today}
+              className="w-full cursor-pointer bg-black/40 border border-white/10 rounded-2xl px-5 py-4 outline-none [color-scheme:dark]"
             />
-            <p className="text-red-400 text-sm mt-2">{errors.age?.message}</p>
+            <p className="text-red-400 text-sm mt-2">{errors.dateOfBirth?.message}</p>
           </div>
 
           <div>

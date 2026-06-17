@@ -4,38 +4,53 @@ import { assessmentQuestions } from '../constants/assessmentQuestions';
 
 export interface ProfileData {
   fullName: string;
-  age: string;
+  dateOfBirth: string;
   occupation: string;
 }
 
 export type AssessmentAnswers = Record<string, number>;
 
-interface ReadableAssessmentAnswer {
+export interface ConstraintData {
   id: string;
-  question: string;
-  selectedIndex: number | null;
-  selectedAnswer: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  days: string[];
 }
 
 export interface OnboardingSubmissionPayload {
-  profile: ProfileData;
-  assessment: ReadableAssessmentAnswer[];
+  fullName: string;
+  dateOfBirth: string;
+  occupation: string;
+  focusDuration: string;
+  distractionLevel: string;
+  energyConsistency: string;
+  taskInitiation: string;
+  recoveryPattern: string;
+  submittedAt: string;
+}
+
+export interface ConstraintsSubmissionPayload {
+  hasConstraints: boolean;
+  constraints: Omit<ConstraintData, 'id'>[];
   submittedAt: string;
 }
 
 interface OnboardingState {
   profile: ProfileData;
   assessment: AssessmentAnswers;
+  constraints: ConstraintData[];
 
   setProfile: (data: Partial<ProfileData>) => void;
   setAssessment: (data: AssessmentAnswers) => void;
+  setConstraints: (data: ConstraintData[]) => void;
 
   reset: () => void;
 }
 
 const initialProfile: ProfileData = {
   fullName: '',
-  age: '',
+  dateOfBirth: '',
   occupation: '',
 };
 
@@ -44,6 +59,7 @@ export const useOnboardingStore = create<OnboardingState>()(
     (set) => ({
       profile: initialProfile,
       assessment: {},
+      constraints: [],
 
       setProfile: (data) =>
         set((state) => ({
@@ -61,10 +77,16 @@ export const useOnboardingStore = create<OnboardingState>()(
           },
         })),
 
+      setConstraints: (data) =>
+        set({
+          constraints: data,
+        }),
+
       reset: () =>
         set({
           profile: initialProfile,
           assessment: {},
+          constraints: [],
         }),
     }),
     {
@@ -78,20 +100,41 @@ export function buildOnboardingSubmissionPayload(
   profile: ProfileData,
   assessment: AssessmentAnswers,
 ): OnboardingSubmissionPayload {
-  return {
-    profile,
-    assessment: assessmentQuestions.map((question) => {
-      const selectedIndex = assessment[question.id];
-      const selectedAnswer =
-        selectedIndex === undefined ? '' : (question.options[selectedIndex] ?? '');
+  const getSelectedAnswer = (questionId: string) => {
+    const question = assessmentQuestions.find((item) => item.id === questionId);
+    const selectedIndex = assessment[questionId];
 
-      return {
-        id: question.id,
-        question: question.title,
-        selectedIndex: selectedIndex ?? null,
-        selectedAnswer,
-      };
-    }),
+    if (!question || selectedIndex === undefined) {
+      return '';
+    }
+
+    return question.options[selectedIndex] ?? '';
+  };
+
+  return {
+    fullName: profile.fullName,
+    dateOfBirth: profile.dateOfBirth,
+    occupation: profile.occupation,
+    focusDuration: getSelectedAnswer('focusDuration'),
+    distractionLevel: getSelectedAnswer('distractionLevel'),
+    energyConsistency: getSelectedAnswer('energyConsistency'),
+    taskInitiation: getSelectedAnswer('taskInitiation'),
+    recoveryPattern: getSelectedAnswer('recoveryPattern'),
+    submittedAt: new Date().toISOString(),
+  };
+}
+
+export function buildConstraintsSubmissionPayload(
+  constraints: ConstraintData[],
+): ConstraintsSubmissionPayload {
+  return {
+    hasConstraints: constraints.length > 0,
+    constraints: constraints.map(({ name, startTime, endTime, days }) => ({
+      name,
+      startTime,
+      endTime,
+      days: days ?? [],
+    })),
     submittedAt: new Date().toISOString(),
   };
 }
