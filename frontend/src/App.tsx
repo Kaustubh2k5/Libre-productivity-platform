@@ -16,7 +16,7 @@ import FocusAssessment from './features/onboarding/pages/FocusAssessment';
 import Constraints from './features/onboarding/pages/Constraints';
 import GenerateSystem from './features/onboarding/pages/GenerateSystem';
 import SandboxShell from './features/sandbox/pages/SandBoxPage';
-
+import DailyTodoPage from './features/todo/pages/DailyTodo';
 function App() {
   return (
     <Routes>
@@ -41,6 +41,8 @@ function App() {
       </Route>
       {/* Sandbox */}
       <Route path="sandbox" element={<SandboxShell />} />
+      {/* Daily Todo */}
+      <Route path="dailytodo" element={<DailyTodoPage />} />
     </Routes>
   );
 }
