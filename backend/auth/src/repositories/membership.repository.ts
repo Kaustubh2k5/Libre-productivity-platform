@@ -52,4 +52,15 @@ export class MembershipRepository {
       },
     });
   }
+
+  async findFirstMembershipWithApp(userId: string) {
+    return prisma.membership.findFirst({
+      where: {
+        userId,
+      },
+      include: {
+        app: true,
+      },
+    });
+  }
 }

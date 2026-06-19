@@ -4,6 +4,7 @@ import {
   verifySignup,
   signin,
   signout,
+  refresh 
 } from "../controllers/auth.controller.js";
 import { validate } from "../middlewares/validate.middleware.js";
 import {
@@ -11,6 +12,7 @@ import {
   signupVerifySchema,
   signinSchema,
   signoutSchema,
+  refreshSchema,
 } from "../schemas/auth.schema.js";
 import {
   signupRateLimitMiddleware,
@@ -71,4 +73,5 @@ router.post(
  */
 router.post("/signout", validate(signoutSchema), signout);
 
+router.post("/refresh",validate(refreshSchema),refresh);
 export default router;

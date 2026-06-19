@@ -1,11 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import {
-  signupStartService,
-  signupVerifyService,
-} from "../modules/signup/services/signup.service.js";
+import {signupStartService,signupVerifyService} from "../modules/signup/services/signup.service.js";
 import { signinService } from "../modules/signin/services/signin.service.js";
 import { signoutService } from "../modules/signout/services/signout.service.js";
-
+import { refreshService } from "../modules/refresh/refresh.service.js";
 /**
  * STEP 1
  * Initiate signup
@@ -120,3 +117,19 @@ export const signout = async (
     next(error);
   }
 };
+
+export const refresh = async(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) =>{
+  try {
+    const { refreshToken } = req.body;
+
+    const tokens = await refreshService(refreshToken);
+
+    return res.status(200).json(tokens);
+  } catch (err) {
+    next(err);
+  }
+}
