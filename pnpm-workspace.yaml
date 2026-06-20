@@ -1,5 +1,13 @@
 packages:
   - "frontend"
+  - "backend/*"
+
+allowBuilds:
+  '@prisma/client': false
+  '@prisma/engines': false
+  bcrypt: false
+  esbuild: false
+  prisma: false
 
 onlyBuiltDependencies:
   - esbuild
