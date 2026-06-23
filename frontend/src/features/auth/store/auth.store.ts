@@ -2,8 +2,8 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export interface AuthStoreState {
-  accessToken: string;
-  refreshToken: string;
+  accessToken: string | null;
+  refreshToken: string | null;
   setAccessToken: (token: string) => void;
   setRefreshToken: (token: string) => void;
   clearTokens: () => void;
@@ -12,14 +12,14 @@ export interface AuthStoreState {
 const useAuthStoreBase = create<AuthStoreState>()(
   persist(
     (set) => ({
-      accessToken: 'jwt_secure_access_token_token_abc_123',
-      refreshToken: 'refresh_secure_refresh_token_xyz_789',
+      accessToken: null,
+      refreshToken: null,
 
       setAccessToken: (token) => set({ accessToken: token }),
       setRefreshToken: (token) => set({ refreshToken: token }),
       clearTokens: () => set({ 
-        accessToken: '', 
-        refreshToken: '' 
+        accessToken: null, 
+        refreshToken: null 
       }),
     }),
     {

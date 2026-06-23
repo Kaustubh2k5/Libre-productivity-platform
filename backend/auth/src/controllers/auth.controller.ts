@@ -79,7 +79,7 @@ export const signin = async (
       password,
       clientId,
     });
-
+    console.log('Signin Result:', result);
     return res.status(200).json({
       success: true,
       message: result.message,

@@ -32,7 +32,7 @@ export function handleSignup(data: SignupData): SignupErrors {
   }
 
   // Password Validation
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#]).{8,}$/;
 
   if (!data.password) {
     errors.password = 'Password is required';
@@ -76,7 +76,7 @@ export function handleLogin(data: logInData): logInErrors {
   }
 
   // Password Validation
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&]).{8,}$/;
 
   if (!data.password) {
     errors.password = 'Password is required';

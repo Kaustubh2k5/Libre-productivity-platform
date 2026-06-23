@@ -4,20 +4,24 @@ import AuthLayout from '../components/AuthLayout';
 import { User, Mail, Lock, CheckCircle2, Circle, Eye } from 'lucide-react';
 import { handleSignup } from '../../../lib/utils';
 import axios from 'axios';
-
+import { ErrorToast } from '../components/Toast/ToastSystem';
+import { useNavigate } from 'react-router-dom';
 // define axios instance for requests
 const api = axios.create({
-  baseURL: 'http://localhost:5001/auth/signup',
+  baseURL: 'http://localhost:8081/auth/signup/start',
 });
+
+
 
 export default function SignupPage() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const [toastMessage, setToastMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-
+  const navigate = useNavigate();
   // function to handle signup request
   const handleSignupForm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +35,15 @@ export default function SignupPage() {
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      console.log(validationErrors);
+
+      const firstError = Object.values(validationErrors)[0];
+
+      setToastMessage(firstError ?? 'Validation failed');
+      setShowToast(true);
+
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
 
       return;
     }
@@ -40,20 +52,40 @@ export default function SignupPage() {
 
     // send api POST request using axios
     try {
-      const response = await axios.post('http://localhost:3000/signup', {
-        username,
+      const response = await api.post('', {
         email,
         password,
+        clientId : 'libre-web',
       });
 
       console.log(response.data);
-    } catch (error) {
-      console.log(error);
+
+      navigate('/auth/verify', { state: { email, password } });
+    }catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(error);
+
+        setToastMessage(
+          error.response?.data?.message ??
+          error.message ??
+          'Unknown error'
+        );
+
+        setShowToast(true);
+
+        setTimeout(() => {
+          setShowToast(false);
+        }, 3000);
+      }
     }
   };
 
   return (
     <AuthLayout title="Create Identity" subtitle="Join the network">
+        <ErrorToast
+          message={toastMessage}
+          visible={showToast}
+        />
       <div className="space-y-8">
         {/* Social Logins */}
         <div className="flex flex-col sm:flex-row gap-4">

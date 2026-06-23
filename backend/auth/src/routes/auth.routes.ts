@@ -72,6 +72,12 @@ router.post(
  * - remove cached session
  */
 router.post("/signout", validate(signoutSchema), signout);
+/**
+ * Sign out user
+ * - validate refresh token
+ * - create a new access token
+ */
 
 router.post("/refresh",validate(refreshSchema),refresh);
+
 export default router;

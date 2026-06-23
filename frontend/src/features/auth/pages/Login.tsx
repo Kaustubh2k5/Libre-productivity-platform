@@ -3,32 +3,67 @@ import { Link } from 'react-router-dom';
 import AuthLayout from '../components/AuthLayout';
 import { Mail, Lock, Eye } from 'lucide-react';
 import { handleLogin } from '../../../lib/utils';
+import { useNavigate } from 'react-router-dom';
+import { useAuthTokens } from '../../../lib/auth.util';
+import axios from 'axios';
+import { getAccessToken } from '../../../lib/auth.util';
+
+console.log(getAccessToken());
+const api = axios.create({baseURL: 'http://localhost:8081/auth/signin',});
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-
+  const navigate = useNavigate();
+  const {storeAccessToken,storeRefreshToken,} = useAuthTokens();
   // function to handle signup request
-  const handleLoginForm = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLoginForm = async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    const validationErrors = handleLogin({
-      email,
-      password,
-    });
+      const validationErrors = handleLogin({
+        email,
+        password,
+      });
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      console.log(validationErrors);
-      return;
-    }
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        console.log(validationErrors);
+        return;
+      }
 
-    console.log('Form Submitted');
+      try {
+        const response = await api.post('', {
+          email,
+          password,
+          clientId : 'libre-web',
+        });
 
-    // send api POST request using axios
-  };
+        const accessToken = response.data?.data?.accessToken;
+        const refreshToken = response.data?.data?.refreshToken;
+
+        if (!accessToken) {
+          throw new Error('Access token missing');
+        }
+
+        storeAccessToken(accessToken);
+        storeRefreshToken(refreshToken ?? '');
+
+        console.log('Stored Auth State:', {
+          accessToken,
+          refreshToken,
+        });
+
+        navigate('/dailytodo');
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(error.response?.data ?? error.message);
+        } else {
+          console.error(error);
+        }
+      }
+    };
 
   return (
     <AuthLayout title="Return to Flow" subtitle="Select your method to authenticate">
