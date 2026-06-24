@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model GoalTemplate {
+  id          String   @id @default(uuid())
+  uid         String
+  name        String
+  description String?
+  columns     Json     @default("[]")
+
+  // Future proofing fields
+  isActive    Boolean  @default(true)
+  metadata    Json?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model GoalLog {
+  id             String   @id @default(uuid())
+  uid            String
+  taskId         String
+  taskTitle      String
+  tags           String[]
+  priority       String
+  estimatedHours Float
+  templateId     String
+  templateName   String
+  payload        Json     @default("{}")
+
+  // Future proofing fields
+  isActive    Boolean  @default(true)
+  metadata    Json?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model TimetableSlot {
+  id        String   @id @default(uuid())
+  uid       String
+  timeSlot  String
+  activity  String
+  category  String
+
+  // Future proofing fields
+  isActive    Boolean  @default(true)
+  metadata    Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
