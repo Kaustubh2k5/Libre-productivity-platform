@@ -1,0 +1,33 @@
+{
+  "id": "tt_today",
+  "date": "2026-06-27",
+  "timezone": "Asia/Kolkata",
+  "slots": [
+    {
+      "id": "slot1",
+      "title": "DSA",
+      "description": "Graphs Revision",
+      "startTime": "2026-06-27T09:00:00+05:30",
+      "endTime": "2026-06-27T11:00:00+05:30",
+      "estimatedHours": 2,
+      "priority": "HIGH",
+      "tag": {
+        "name": "DSA",
+        "existsOnServer": false
+      }
+    },
+    {
+      "id": "slot2",
+      "title": "Gym",
+      "description": "Leg Day",
+      "startTime": "2026-06-27T18:00:00+05:30",
+      "endTime": "2026-06-27T19:30:00+05:30",
+      "estimatedHours": 1.5,
+      "priority": "MEDIUM",
+      "tag": {
+        "name": "Fitness",
+        "existsOnServer": false
+      }
+    }
+  ]
+}

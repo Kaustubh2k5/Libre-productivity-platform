@@ -7,52 +7,106 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model GoalTemplate {
-  id          String   @id @default(uuid())
-  uid         String
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum OutboxStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
+}
+
+model Goal {
+  id String @id @default(uuid())
+
+  uid String
+
   name        String
   description String?
-  columns     Json     @default("[]")
 
-  // Future proofing fields
-  isActive    Boolean  @default(true)
-  metadata    Json?
+  columns Json
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model GoalLog {
-  id             String   @id @default(uuid())
-  uid            String
-  taskId         String
-  taskTitle      String
-  tags           String[]
-  priority       String
-  estimatedHours Float
-  templateId     String
-  templateName   String
-  payload        Json     @default("{}")
-
-  // Future proofing fields
-  isActive    Boolean  @default(true)
-  metadata    Json?
-
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-}
-
-model TimetableSlot {
-  id        String   @id @default(uuid())
-  uid       String
-  timeSlot  String
-  activity  String
-  category  String
-
-  // Future proofing fields
-  isActive    Boolean  @default(true)
-  metadata    Json?
+  isActive Boolean @default(true)
+  metadata Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  timetableSlots TimetableSlot[]
+
+  @@unique([uid, name])
+  @@index([uid])
+}
+
+model Timetable {
+  id String @id @default(uuid())
+
+  uid      String
+  date     DateTime
+  timezone String
+
+  version Int @default(1)
+
+  isActive Boolean @default(true)
+  metadata Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  slots TimetableSlot[]
+
+  @@unique([uid, date])
+  @@index([uid])
+}
+
+model TimetableSlot {
+  id String @id @default(uuid())
+
+  timetableId String
+  timetable   Timetable @relation(fields: [timetableId], references: [id], onDelete: Cascade)
+
+  goalId String?
+  goal   Goal?   @relation(fields: [goalId], references: [id])
+
+  title       String
+  description String?
+
+  startTime DateTime
+  endTime   DateTime
+
+  estimatedHours Float
+  priority       TaskPriority
+
+  position Int
+
+  completed Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([timetableId])
+  @@index([goalId])
+}
+
+model OutboxEvent {
+  id String @id @default(uuid())
+
+  topic     String
+  eventType String
+
+  payload Json
+
+  status OutboxStatus @default(PENDING)
+
+  retryCount Int     @default(0)
+  lastError  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
 }

@@ -2,9 +2,9 @@ import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
 interface AccessTokenPayload {
-  sub: string;
+  userId: string;
   email?: string;
-  role?: string;
+  clientId?: string;
 }
 
 export function verifyAccessToken(
@@ -14,7 +14,8 @@ export function verifyAccessToken(
 ) {
   try {
     const authHeader = req.headers.authorization;
-
+    console.log("JWT_PUBLIC_KEY =", process.env.JWT_PUBLIC_KEY);
+    console.log("JWT_ACCESS_SECRET =", process.env.JWT_ACCESS_SECRET);
     if (!authHeader) {
       return res.status(401).json({
         success: false,
@@ -33,17 +34,19 @@ export function verifyAccessToken(
 
     const payload = jwt.verify(
       token,
-      process.env.JWT_ACCESS_SECRET!,
+      process.env.JWT_PUBLIC_KEY!,
     ) as AccessTokenPayload;
 
     req.user = {
-      uid: payload.sub,
+      uid: payload.userId,
       email: payload.email,
-      role: payload.role,
+      clientId: payload.clientId,
     };
 
     next();
   } catch (error) {
+    console.error("JWT ERROR:", error);
+
     return res.status(401).json({
       success: false,
       error: "INVALID_ACCESS_TOKEN",

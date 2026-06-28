@@ -1,0 +1,13 @@
+i did NOT want to write a test suite but i did write a sample payload and here is how you send a curl request
+
+1. ensure you run docker compose up --build. and ensure you have migration files. 
+2. in another terminal (or use -d to detach) generate a token : export TOKEN=$(pnpm tsx scripts/generate-token.ts)
+3. now send a curl request as (make sure you are in backend/dailytodo) :
+
+curl -v \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  --data @scripts/test.json \
+  http://localhost:5003/api/dailytodo
+
+4. you can obv check status at prisma studio as well as localhost:8080 (kafka ui) to see if the event is beign logged.
