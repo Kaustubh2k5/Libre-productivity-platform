@@ -120,3 +120,4 @@ exec -l /
 *.swp
 *.swo
 *.rdb
+implementation_plan.md

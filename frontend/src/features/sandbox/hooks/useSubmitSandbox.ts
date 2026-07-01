@@ -1,53 +1,45 @@
+import { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSandboxUi } from '../context/SandboxUiContext';
 import { useActiveTable } from './useActiveTable';
+import { createSandboxTable } from '../api/sandboxApi';
 
 export function useSubmitSandbox() {
   const navigate = useNavigate();
   const activeTable = useActiveTable();
   const { triggerToast } = useSandboxUi();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submitAndExit = () => {
+  const submitAndExit = async () => {
     if (!activeTable) {
-      triggerToast("No active database to submit");
+      triggerToast('No active database to submit');
       return;
     }
 
-    const tableJson = JSON.stringify(activeTable, null, 2);
+    if (isSubmitting) {
+      return;
+    }
 
-    console.log("=========================================");
-    console.log("📊 SUBMITTED ACTIVE TABLE JSON REPRESENTATION");
-    console.log("=========================================");
-    console.log(tableJson);
-    console.log("=========================================");
+    setIsSubmitting(true);
 
-    /*
-    // OPTIONAL: Sending the Table JSON payload via Axios POST request
-    // To use this, first install axios into your project:
-    // npmi axios
-    // then uncomment the import at top: import axios from 'axios';
-    //
-    // const sendTableData = async () => {
-    //   try {
-    //     const response = await axios.post('https://your-custom-backend-api.com/v1/submit-table', activeTable, {
-    //       headers: {
-    //         'Content-Type': 'application/json'
-    //       }
-    //     });
-    //     console.log('API Post request successful:', response.data);
-    //   } catch (error) {
-    //     console.error('API Post request failed:', error);
-    //   }
-    // };
-    // sendTableData();
-    */
+    try {
+      await createSandboxTable(activeTable);
+      triggerToast('Matrix saved successfully');
 
-    triggerToast("Matrix JSON submitted & printed to Console!");
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 800);
+    } catch (error) {
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.error || error.response?.data?.errors?.formErrors?.[0] || error.message
+        : 'Unable to save matrix';
 
-    setTimeout(() => {
-      navigate('/dashboard');
-    }, 1500);
+      triggerToast(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  return { submitAndExit };
+  return { submitAndExit, isSubmitting };
 }

@@ -39,7 +39,7 @@ export function SandboxUiProvider({ children }: { children: ReactNode }) {
   const [dragResetKey, setDragResetKey] = useState<number>(0);
 
   const incrementDragResetKey = () => {
-    setDragResetKey(prev => prev + 1);
+    setDragResetKey((prev) => prev + 1);
   };
 
   const triggerToast = (msg: string) => {

@@ -6,12 +6,7 @@ import { handleSignup } from '../../../lib/utils';
 import axios from 'axios';
 import { ErrorToast } from '../components/Toast/ToastSystem';
 import { useNavigate } from 'react-router-dom';
-// define axios instance for requests
-const api = axios.create({
-  baseURL: 'http://localhost:8081/auth/signup/start',
-});
-
-
+import api from '../../../lib/api';
 
 export default function SignupPage() {
   const [username, setUsername] = useState('');
@@ -52,24 +47,20 @@ export default function SignupPage() {
 
     // send api POST request using axios
     try {
-      const response = await api.post('', {
+      const response = await api.post('/auth/signup/start', {
         email,
         password,
-        clientId : 'libre-web',
+        clientId: import.meta.env.VITE_LIBRE_AUTH_CLIENT_ID,
       });
 
       console.log(response.data);
 
       navigate('/auth/verify', { state: { email, password } });
-    }catch (error) {
+    } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error(error);
 
-        setToastMessage(
-          error.response?.data?.message ??
-          error.message ??
-          'Unknown error'
-        );
+        setToastMessage(error.response?.data?.message ?? error.message ?? 'Unknown error');
 
         setShowToast(true);
 
@@ -82,10 +73,7 @@ export default function SignupPage() {
 
   return (
     <AuthLayout title="Create Identity" subtitle="Join the network">
-        <ErrorToast
-          message={toastMessage}
-          visible={showToast}
-        />
+      <ErrorToast message={toastMessage} visible={showToast} />
       <div className="space-y-8">
         {/* Social Logins */}
         <div className="flex flex-col sm:flex-row gap-4">

@@ -5,11 +5,7 @@ import AuthLayout from '../components/AuthLayout';
 import { ArrowLeft, RefreshCw, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { useAuthTokens } from '../../../lib/auth.util.js';
 import axios from 'axios';
-
-// Define the Axios verification instance
-const api = axios.create({
-  baseURL: 'http://localhost:8081/auth/signup/verify',
-});
+import api from '../../../lib/api';
 
 export default function VerifyOtpPage() {
   const navigate = useNavigate();
@@ -64,7 +60,7 @@ export default function VerifyOtpPage() {
       if (otp[index] === '' && index > 0 && inputRefs.current[index - 1]) {
         // Move focus backward first
         inputRefs.current[index - 1].focus();
-        
+
         const newOtp = [...otp];
         newOtp[index - 1] = '';
         setOtp(newOtp);
@@ -85,7 +81,7 @@ export default function VerifyOtpPage() {
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData('text').trim();
-    
+
     // Remove space, find first 6 digits
     const cleanedDigits = pastedData.replace(/\s/g, '').substring(0, 6);
     if (!/^\d+$/.test(cleanedDigits)) return;
@@ -116,11 +112,13 @@ export default function VerifyOtpPage() {
     }
 
     try {
-      console.log(`📤 POST to verify endpoint with email: "${email}", otp: "${enteredCode}", clientId: "libre-web"`);
-      const response = await api.post('', {
+      console.log(
+        `📤 POST to verify endpoint with email: "${email}", otp: "${enteredCode}", clientId: "libre-web"`,
+      );
+      const response = await api.post('/auth/verify', {
         email,
         otp: enteredCode,
-        clientId: 'libre-web',
+        clientId: import.meta.env.VITE_LIBRE_AUTH_CLIENT_ID,
       });
 
       console.log('Verification Success Response:', response.data);
@@ -140,15 +138,14 @@ export default function VerifyOtpPage() {
         storeRefreshToken(serverRefreshToken || '');
         navigate('/onboarding');
       }, 1500);
-
     } catch (error) {
       console.error('Verification request failed:', error);
-      
+
       if (axios.isAxiosError(error)) {
         setErrorMsg(
           error.response?.data?.message ??
-          error.message ??
-          'Could not connect to the verification server. Please try again.'
+            error.message ??
+            'Could not connect to the verification server. Please try again.',
         );
       } else if (error instanceof Error) {
         setErrorMsg(error.message);
@@ -177,11 +174,13 @@ export default function VerifyOtpPage() {
     setTimer(59);
     setErrorMsg(null);
     try {
-      console.log(`📤 Sending resend request to: http://localhost:8081/auth/signup/start with email: "${email}"`);
-      await axios.post('http://localhost:8081/auth/signup/start', {
+      console.log(
+        `📤 Sending resend request to: http://localhost:8081/auth/signup/start with email: "${email}"`,
+      );
+      await api.post('/auth/signup/start', {
         email,
         password,
-        clientId: 'libre-web',
+        clientId: import.meta.env.VITE_LIBRE_AUTH_CLIENT_ID,
       });
       setNotification('A new verification code has been sent.');
       setTimeout(() => setNotification(null), 4000);
@@ -189,9 +188,7 @@ export default function VerifyOtpPage() {
       console.error('Failed to resend code:', error);
       if (axios.isAxiosError(error)) {
         setErrorMsg(
-          error.response?.data?.message ??
-          error.message ??
-          'Failed to resend verification code.'
+          error.response?.data?.message ?? error.message ?? 'Failed to resend verification code.',
         );
       } else if (error instanceof Error) {
         setErrorMsg(error.message);
@@ -202,8 +199,8 @@ export default function VerifyOtpPage() {
   };
 
   return (
-    <AuthLayout 
-      title="Verify OTP" 
+    <AuthLayout
+      title="Verify OTP"
       subtitle={email ? `We sent a code to ${email}` : 'Please enter your verification code'}
     >
       <div className="space-y-8">
@@ -212,7 +209,7 @@ export default function VerifyOtpPage() {
           {notification && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
+              animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs py-3 px-4 rounded-xl flex items-center gap-2.5 font-mono"
             >
@@ -224,7 +221,7 @@ export default function VerifyOtpPage() {
           {errorMsg && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
+              animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs py-3 px-4 rounded-xl flex items-center gap-2.5 font-mono"
             >
@@ -239,7 +236,7 @@ export default function VerifyOtpPage() {
             <label className="block text-[11px] font-mono tracking-wider text-white/40 uppercase font-semibold">
               Enter 6-digit code
             </label>
-            
+
             <div className="flex justify-between gap-2.5 sm:gap-3">
               {otp.map((digit, idx) => (
                 <input
@@ -256,7 +253,7 @@ export default function VerifyOtpPage() {
                   onPaste={idx === 0 ? handlePaste : undefined}
                   disabled={success}
                   className={`w-12 h-14 bg-white/5 border text-center text-xl font-mono font-bold rounded-xl focus:outline-none transition-all ${
-                    success 
+                    success
                       ? 'border-emerald-500 text-emerald-400 bg-emerald-500/5'
                       : errorMsg
                         ? 'border-red-600/50 text-red-400 focus:border-red-500 focus:ring-1 focus:ring-red-500/20'
@@ -273,7 +270,7 @@ export default function VerifyOtpPage() {
               type="submit"
               disabled={success}
               className={`w-full py-4 text-white rounded-xl font-bold uppercase tracking-widest transition-all shadow-lg active:scale-[0.98] cursor-pointer ${
-                success 
+                success
                   ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-950/20'
                   : 'bg-red-600 hover:bg-red-700 shadow-red-900/20'
               }`}
@@ -302,8 +299,8 @@ export default function VerifyOtpPage() {
 
         {/* Return link */}
         <div className="text-center pt-2 border-t border-white/[0.03]">
-          <Link 
-            to="/auth/signup" 
+          <Link
+            to="/auth/signup"
             className="inline-flex items-center gap-2 text-xs text-white/30 hover:text-white transition-colors uppercase font-mono tracking-wider font-bold"
           >
             <ArrowLeft className="w-3.5 h-3.5" />

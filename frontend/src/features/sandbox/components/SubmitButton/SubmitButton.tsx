@@ -1,9 +1,8 @@
-import React from 'react';
 import { useSandboxUi } from '../../context/SandboxUiContext';
 import { useSubmitSandbox } from '../../hooks/useSubmitSandbox';
 
 export default function SubmitButton() {
-  const { submitAndExit } = useSubmitSandbox();
+  const { submitAndExit, isSubmitting } = useSubmitSandbox();
   const { showControlsDrawer } = useSandboxUi();
 
   return (
@@ -18,11 +17,12 @@ export default function SubmitButton() {
       <button
         id="btn-submit-matrix"
         onClick={submitAndExit}
-        className="bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-mono font-bold text-xs uppercase tracking-widest px-8 py-3.5 border border-red-500 shadow-2xl transition-all cursor-pointer flex items-center gap-2.5 rounded-xl hover:scale-102 hover:shadow-red-955/20 duration-150"
+        disabled={isSubmitting}
+        className="bg-red-600 hover:bg-red-700 active:bg-red-800 disabled:bg-zinc-700 disabled:border-zinc-600 disabled:text-zinc-300 disabled:cursor-not-allowed text-white font-mono font-bold text-xs uppercase tracking-widest px-8 py-3.5 border border-red-500 shadow-2xl transition-all cursor-pointer flex items-center gap-2.5 rounded-xl hover:scale-102 hover:shadow-red-955/20 disabled:hover:scale-100 duration-150"
         style={{ boxShadow: '0 12px 35px rgba(0, 0, 0, 0.9)' }}
         title="Submit and save matrix changes, then return to dashboard"
       >
-        <span>Submit Matrix</span>
+        <span>{isSubmitting ? 'Saving Matrix' : 'Submit Matrix'}</span>
         <span className="hidden sm:inline-block text-[9px] bg-black/40 px-1.5 py-0.5 text-zinc-300 border border-white/10 font-medium">SUBMIT</span>
       </button>
     </div>
