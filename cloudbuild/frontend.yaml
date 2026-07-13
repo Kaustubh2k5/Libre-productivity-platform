@@ -1,0 +1,82 @@
+steps:
+  #
+  # Install PNPM
+  #
+  - id: Setup PNPM
+    name: node:22
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        corepack enable
+        corepack prepare pnpm@latest --activate
+
+  #
+  # Install Dependencies
+  #
+  - id: Install Dependencies
+    name: node:22
+    dir: frontend
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        corepack enable
+        pnpm install --frozen-lockfile
+
+  #
+  # Lint
+  #
+  - id: Lint
+    name: node:22
+    dir: frontend
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        corepack enable
+        pnpm lint
+
+  #
+  # Build
+  #
+  - id: Build
+    name: node:22
+    dir: frontend
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        corepack enable
+        pnpm build
+
+  #
+  # Upload Build
+  #
+  - id: Upload
+    name: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        gcloud storage rsync \
+          frontend/dist \
+          gs://${_BUCKET_NAME} \
+          --recursive \
+          --delete
+
+  #
+  # Invalidate CDN
+  #
+  - id: Invalidate CDN
+    name: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        gcloud compute url-maps invalidate-cdn-cache \
+          ${_URL_MAP} \
+          --path "/*"
+
+options:
+  logging: CLOUD_LOGGING_ONLY

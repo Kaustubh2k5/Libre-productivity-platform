@@ -1,3 +1,7 @@
+data "google_project" "current" {
+  project_id = var.project_id
+}
+
 module "vpc" {
   source = "../../modules/vpc"
 
@@ -178,4 +182,57 @@ module "api_gateway" {
   region = var.regionalt
 
   cloudrun_url = module.cloudrun_auth.service_url
+}
+
+module "frontend_sa" {
+
+  source = "../../modules/service_account"
+
+  project_id = var.project_id
+
+  account_id = "frontend-deployer"
+
+  display_name = "Frontend Deployment"
+
+  description = "Deploys frontend assets"
+
+}
+
+module "frontend_iam" {
+
+  source = "../../modules/iam"
+
+  project_id = var.project_id
+
+  service_account_email = module.frontend_sa.email
+
+  roles = [
+
+    "roles/storage.objectAdmin",
+
+    "roles/compute.loadBalancerAdmin"
+
+  ]
+
+}
+
+module "frontend_oidc" {
+
+  source = "../../modules/workload_identity"
+
+  project_id     = var.project_id
+  project_number = data.google_project.current.number
+
+  pool_id = "github-pool"
+  pool_display_name = "GitHub Pool"
+
+  provider_id = "github-provider"
+  provider_display_name = "GitHub Provider"
+
+  github_owner = "Kaustubh2k5"
+  github_repository = "Libre-productivity-platform"
+
+  allowed_branch = "main"
+
+  service_account_email = module.frontend_sa.email
 }

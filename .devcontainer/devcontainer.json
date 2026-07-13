@@ -1,47 +1,39 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+// For format details, see https://aka.ms. For config options, see the
+// README at: https://github.com
 {
 	"name": "Node.js & TypeScript",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:4-22-bookworm",
 	"features": {
+		"ghcr.io/dhoeric/features/google-cloud-cli:1": {
+		"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/terraform:1": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
 		"ghcr.io/devcontainers-extra/features/pnpm:2": {
 			"version": "latest"
 		},
 		"ghcr.io/helpers4/devcontainer/vite-plus:1": {
 			"installVitePlus": true,
 			"installGlobally": true
-		},
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
-		"ghcr.io/devcontainers/features/github-cli:1": {},
-		"ghcr.io/devcontainers/features/terraform:1": {}
+		}
 	},
 
 	"postCreateCommand": "npm install -g pnpm && pnpm install",
 
 	"customizations": {
 		"vscode": {
-		"extensions": [
-			"hashicorp.terraform",
-			"googlecloudtools.cloudcode",
-			"ms-azuretools.vscode-docker",
-			"esbenp.prettier-vscode",
-			"dbaeumer.vscode-eslint"
-		]
+			"extensions": [
+				"hashicorp.terraform",
+				"googlecloudtools.cloudcode",
+				"ms-azuretools.vscode-docker",
+				"esbenp.prettier-vscode",
+				"dbaeumer.vscode-eslint"
+			]
 		}
-	}
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "yarn install",
-
-	// Configure tool-specific properties.
-	// "customizations": {},
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+	},
+	"runArgs": [
+		"--dns=8.8.8.8",
+		"--dns=1.1.1.1"
+	]
 }

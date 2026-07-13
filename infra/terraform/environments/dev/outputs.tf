@@ -33,3 +33,12 @@ output "service_account_email" {
 output "gateway_url" {
   value = module.api_gateway.gateway_url
 }
+
+output "frontend_bucket_name" {
+  value = google_storage_bucket.frontend.name
+}
+
+output "frontend_backend_bucket" {
+  value = google_compute_backend_bucket.frontend.id
+}
+
