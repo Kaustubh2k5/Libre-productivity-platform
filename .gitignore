@@ -105,15 +105,29 @@ backend/**/dist/
 .turbo/
 nx-cache/
 # =========================
-# Cloud
+# Cloud / Terraform
 # =========================
 exec -l /
-**/terraform.tfvars
-*.tfstate
-.tfstate.backup
 .terraform/
-*.hcl
-.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+# Never commit secret-bearing var files (local-only)
+*.auto.tfvars
+*.auto.tfvars.json
+terraform.tfvars
+terraform.tfvars.json
+**/terraform.tfvars
+**/terraform.tfvars.json
+# Non-secret env config and examples are allowed
+!**/dev.tfvars
+!**/terraform.tfvars.example
+# Keep provider lockfile in version control
+!.terraform.lock.hcl
 # =========================
 # Misc
 # =========================
@@ -121,3 +135,4 @@ exec -l /
 *.swo
 *.rdb
 implementation_plan.md
+.history/

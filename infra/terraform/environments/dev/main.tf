@@ -1,238 +1,156 @@
-data "google_project" "current" {
-  project_id = var.project_id
-}
-
-module "vpc" {
-  source = "../../modules/vpc"
+module "shared" {
+  source = "./shared"
 
   project_id = var.project_id
+  region     = var.region
 
-  region = var.region
+  db_password    = var.db_password
+  jwt_secret     = var.jwt_secret
+  refresh_secret = var.refresh_secret
+  mail_password  = var.mail_password
 
-  network_name = "auth-vpc"
+  network_name                  = var.network_name
+  subnet_name                   = var.subnet_name
+  subnet_cidr                   = var.subnet_cidr
+  vpc_connector_name            = var.vpc_connector_name
+  vpc_connector_cidr            = var.vpc_connector_cidr
+  redis_name                    = var.redis_name
+  redis_display_name            = var.redis_display_name
+  cloudsql_instance_name        = var.cloudsql_instance_name
+  artifact_registry_id          = var.artifact_registry_id
+  artifact_registry_description = var.artifact_registry_description
 
-  subnet_name = "auth-subnet"
+  frontend_bucket_name         = var.frontend_bucket_name
+  frontend_backend_bucket_name = var.frontend_backend_bucket_name
+  frontend_lb_name             = var.frontend_lb_name
+  ssl_certificate_name         = var.ssl_certificate_name
+  ssl_domains                  = var.ssl_domains
+  dns_managed_zone             = var.dns_managed_zone
+  dns_name                     = var.dns_name
 
-  subnet_cidr = "10.10.0.0/24"
+  github_owner       = var.github_owner
+  github_repository  = var.github_repository
+  wif_allowed_branch = var.wif_allowed_branch
+  wif_pool_id        = var.wif_pool_id
+  wif_provider_id    = var.wif_provider_id
 }
 
-module "cloudsql" {
-  source = "../../modules/cloudsql"
+module "auth" {
+  source = "./services/auth"
 
-  project_id = var.project_id
-
-  region = var.regionalt
-
-  db_password = var.db_password
-
-  network_id = module.vpc.network_id
-
-  private_vpc_connection = module.vpc.private_vpc_connection
-}
-locals {
-  database_url = "postgresql://${module.cloudsql.database_user}:${var.db_password}@${module.cloudsql.private_ip}:5432/${module.cloudsql.database_name}"
-}
-module "memorystore" {
-  source = "../../modules/memorystore"
-
-  name = "auth-redis-dev"
-
-  display_name = "Auth Redis Dev"
-
-  region = var.region
-
-  network_id =module.vpc.network_id
-
-  memory_size_gb = 1
-}
-
-module "vpc_connector" {
-  source = "../../modules/vpc_connector"
-
-  name = "auth-vpc-connector"
-
-  region = var.region
-
-  network_name = module.vpc.network_name
-
-  ip_cidr_range = "10.8.0.0/28"
-}
-
-module "artifact_registry" {
-  source = "../../modules/artifact_registry"
-
-  project_id = var.project_id
-
-  region = var.region
-
-  repository_id = "auth-repo"
-
-  description = "Auth service docker repository"
-}
-
-module "secrets" {
-  source = "../../modules/secret_manager"
-
-  secrets = {
-    JWT_SECRET     = var.jwt_secret
-
-    REFRESH_SECRET = var.refresh_secret
-
-    DB_PASSWORD    = var.db_password
-
-    DATABASE_URL   = local.database_url
-
-    MAIL_PASSWORD  = var.mail_password
-  }
-}
-module "cloudrun_auth" {
-  source = "../../modules/cloudrun"
-
-  service_name = "auth-service-dev"
-
-  region = var.region
-
-  container_image = "asia-south1-docker.pkg.dev/${var.project_id}/auth-repo/auth-service:latest"
-
-  vpc_connector_id = module.vpc_connector.connector_id
-
+  project_id            = var.project_id
+  region                = var.region
+  gateway_region        = var.gateway_region
   service_account_email = var.service_account_email
-    depends_on = [
-    module.secrets
-  ]
-  env_vars = {
+  container_image       = "${module.shared.artifact_registry_repo}/auth-service:latest"
+  vpc_connector_id      = module.shared.vpc_connector_id
+  cloudsql_private_ip   = module.shared.cloudsql_private_ip
+  redis_host            = module.shared.redis_host
+  redis_port            = module.shared.redis_port
 
-    DB_HOST = module.cloudsql.private_ip
-
-    DB_PORT = "5432"
-
-    DB_NAME = "authdb"
-
-    DB_USER = "authuser"
-
-    REDIS_HOST = module.memorystore.host
-
-    REDIS_PORT = tostring(module.memorystore.port)
-
-    NODE_ENV = "development"
-
-    OTP_TTL = tostring(var.otp_ttl)
-
-    OTP_MAX_ATTEMPTS = tostring(var.otp_max_attempts)
-
-    MAX_SIGNUP_ATTEMPTS = tostring(var.max_signup_attempts)
-
-    LOCK_TIME_SECONDS = tostring(var.lock_time_seconds)
-
-    ACCESS_TOKEN_EXPIRY = var.access_token_expiry
-
-    REFRESH_TOKEN_EXPIRY_DAYS = tostring(var.refresh_token_expiry_days)
-
-    REFRESH_TOKEN_TTL = tostring(var.refresh_token_ttl)
-
-    MAIL_USER = var.mail_user
-
-    CLIENT_ID = var.client_id
-  }
-
-  secret_env_vars = {
-    JWT_ACCESS_SECRET  = "JWT_SECRET"
-
-    JWT_REFRESH_SECRET = "REFRESH_SECRET"
-
-    DB_PASSWORD    = "DB_PASSWORD"
-
-    DATABASE_URL = "DATABASE_URL"
-
-    MAIL_PASSWORD = "MAIL_PASSWORD"
-    
-  }
+  otp_ttl                   = var.otp_ttl
+  otp_max_attempts          = var.otp_max_attempts
+  max_signup_attempts       = var.max_signup_attempts
+  lock_time_seconds         = var.lock_time_seconds
+  access_token_expiry       = var.access_token_expiry
+  refresh_token_expiry_days = var.refresh_token_expiry_days
+  refresh_token_ttl         = var.refresh_token_ttl
+  mail_user                 = var.mail_user
+  client_id                 = var.client_id
 }
 
-resource "google_project_iam_member" "secret_accessor" {
-  project = var.project_id
-
-  role ="roles/secretmanager.secretAccessor"
-
-  member =  "serviceAccount:${var.service_account_email}"
+# Preserve state addresses after the shared/services split.
+moved {
+  from = module.vpc
+  to   = module.shared.module.vpc
 }
 
-resource "google_project_iam_member" "cloudsql_client" {
-  project = var.project_id
-
-  role ="roles/cloudsql.client"
-
-  member = "serviceAccount:${var.service_account_email}"
+moved {
+  from = module.cloudsql
+  to   = module.shared.module.cloudsql
 }
 
-resource "google_project_iam_member" "artifact_registry_reader" {
-  project = var.project_id
-
-  role ="roles/artifactregistry.reader"
-
-  member = "serviceAccount:${var.service_account_email}"
+moved {
+  from = module.memorystore
+  to   = module.shared.module.memorystore
 }
 
-module "api_gateway" {
-  source = "../../modules/api_gateway"
-
-  api_id     = "auth-api-dev"
-  gateway_id = "auth-gateway-dev"
-
-  region = var.regionalt
-
-  cloudrun_url = module.cloudrun_auth.service_url
+moved {
+  from = module.vpc_connector
+  to   = module.shared.module.vpc_connector
 }
 
-module "frontend_sa" {
-
-  source = "../../modules/service_account"
-
-  project_id = var.project_id
-
-  account_id = "frontend-deployer"
-
-  display_name = "Frontend Deployment"
-
-  description = "Deploys frontend assets"
-
+moved {
+  from = module.artifact_registry
+  to   = module.shared.module.artifact_registry
 }
 
-module "frontend_iam" {
-
-  source = "../../modules/iam"
-
-  project_id = var.project_id
-
-  service_account_email = module.frontend_sa.email
-
-  roles = [
-
-    "roles/storage.objectAdmin",
-
-    "roles/compute.loadBalancerAdmin"
-
-  ]
-
+moved {
+  from = module.secrets
+  to   = module.shared.module.secrets
 }
 
-module "frontend_oidc" {
+moved {
+  from = module.frontend_sa
+  to   = module.shared.module.frontend_sa
+}
 
-  source = "../../modules/workload_identity"
+moved {
+  from = module.frontend_iam
+  to   = module.shared.module.frontend_iam
+}
 
-  project_id     = var.project_id
-  project_number = data.google_project.current.number
+moved {
+  from = module.frontend_oidc
+  to   = module.shared.module.github_wif
+}
 
-  pool_id = "github-pool"
-  pool_display_name = "GitHub Pool"
+moved {
+  from = module.frontend_bucket
+  to   = module.shared.module.frontend_bucket
+}
 
-  provider_id = "github-provider"
-  provider_display_name = "GitHub Provider"
+moved {
+  from = module.frontend_backend_bucket
+  to   = module.shared.module.frontend_backend_bucket
+}
 
-  github_owner = "Kaustubh2k5"
-  github_repository = "Libre-productivity-platform"
+moved {
+  from = module.frontend_ssl
+  to   = module.shared.module.frontend_ssl
+}
 
-  allowed_branch = "main"
+moved {
+  from = module.frontend_lb
+  to   = module.shared.module.frontend_lb
+}
 
-  service_account_email = module.frontend_sa.email
+moved {
+  from = module.frontend_dns
+  to   = module.shared.module.frontend_dns
+}
+
+moved {
+  from = module.cloudrun_auth
+  to   = module.auth.module.cloudrun
+}
+
+moved {
+  from = module.api_gateway
+  to   = module.auth.module.api_gateway
+}
+
+moved {
+  from = google_project_iam_member.secret_accessor
+  to   = module.auth.google_project_iam_member.secret_accessor
+}
+
+moved {
+  from = google_project_iam_member.cloudsql_client
+  to   = module.auth.google_project_iam_member.cloudsql_client
+}
+
+moved {
+  from = google_project_iam_member.artifact_registry_reader
+  to   = module.auth.google_project_iam_member.artifact_registry_reader
 }

@@ -1,13 +1,25 @@
 name: Frontend CI/CD
 
 on:
-  push:
+  pull_request:
     branches:
-      - main
-
+      - development
     paths:
       - "frontend/**"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
       - "cloudbuild/frontend.yaml"
+      - ".github/workflows/frontend.yml"
+
+  push:
+    branches:
+      - development
+    paths:
+      - "frontend/**"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "cloudbuild/frontend.yaml"
+      - ".github/workflows/frontend.yml"
 
   workflow_dispatch:
 
@@ -15,28 +27,89 @@ permissions:
   contents: read
   id-token: write
 
-jobs:
-  deploy:
-    name: Deploy Frontend
+concurrency:
+  group: frontend-dev
+  cancel-in-progress: false
 
+jobs:
+  ci:
+    name: Frontend CI
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Checkout Repository
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --filter libre...
+
+      - name: Lint
+        run: pnpm --dir frontend lint
+
+      - name: Build
+        run: pnpm --dir frontend build
+
+  deploy:
+    name: Deploy Frontend
+    needs: ci
+    if: github.ref == 'refs/heads/development' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    environment: dev
+
+    env:
+      CLOUDSDK_CORE_PROJECT: ${{ vars.GCP_PROJECT_ID }}
+      FRONTEND_BUCKET_NAME: ${{ vars.FRONTEND_BUCKET_NAME }}
+      URL_MAP_NAME: ${{ vars.URL_MAP_NAME }}
+
+    steps:
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          service_account: ${{ secrets.FRONTEND_SERVICE_ACCOUNT }}
 
-      - name: Setup Google Cloud SDK
+      - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Validate deploy configuration
+        env:
+          WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          FRONTEND_SERVICE_ACCOUNT: ${{ secrets.FRONTEND_SERVICE_ACCOUNT }}
+        run: |
+          missing=0
+          for name in CLOUDSDK_CORE_PROJECT FRONTEND_BUCKET_NAME URL_MAP_NAME FRONTEND_SERVICE_ACCOUNT WORKLOAD_IDENTITY_PROVIDER; do
+            eval "value=\${$name}"
+            if [ -z "${value}" ]; then
+              echo "Missing required configuration: ${name}"
+              missing=1
+            fi
+          done
+          if [ "${missing}" -ne 0 ]; then
+            exit 1
+          fi
+
       - name: Trigger Cloud Build
+        env:
+          FRONTEND_SERVICE_ACCOUNT: ${{ secrets.FRONTEND_SERVICE_ACCOUNT }}
         run: |
           gcloud builds submit \
+            --project="${CLOUDSDK_CORE_PROJECT}" \
             --config=cloudbuild/frontend.yaml \
+            --service-account="projects/${CLOUDSDK_CORE_PROJECT}/serviceAccounts/${FRONTEND_SERVICE_ACCOUNT}" \
+            --substitutions="_BUCKET_NAME=${FRONTEND_BUCKET_NAME},_URL_MAP=${URL_MAP_NAME}" \
             .

@@ -1,0 +1,58 @@
+# Copy to terraform.tfvars (gitignored) and fill in real values.
+# Never commit terraform.tfvars — secrets belong only in:
+#   - local terraform.tfvars (gitignored), or
+#   - CI secrets injected as TF_VAR_* (never echoed in logs)
+
+project_id            = "your-gcp-project-id"
+region                = "asia-south1"
+# API Gateway is not available in asia-south1; northeast is the regional fallback.
+gateway_region        = "asia-northeast1"
+service_account_email = "runtime-sa@your-gcp-project-id.iam.gserviceaccount.com"
+
+# Shared networking / data plane names (use existing GCP names if resources already exist)
+network_name           = "libre-vpc-dev"
+subnet_name            = "libre-subnet-dev"
+subnet_cidr            = "10.10.0.0/24"
+vpc_connector_name     = "libre-vpc-connector"
+vpc_connector_cidr     = "10.8.0.0/28"
+redis_name             = "libre-redis-dev"
+redis_display_name     = "Libre Redis Dev"
+cloudsql_instance_name = "libre-postgres-dev"
+artifact_registry_id   = "libre-artifacts-dev"
+artifact_registry_description = "Shared container images for Libre services"
+
+# Frontend hosting
+frontend_bucket_name         = "libre-frontend-dev"
+frontend_backend_bucket_name = "libre-frontend-backend"
+frontend_lb_name             = "libre-frontend-lb"
+ssl_certificate_name         = "libre-cert"
+ssl_domains = [
+  "libre-productivity.xyz",
+  "www.libre-productivity.xyz",
+]
+dns_managed_zone = "libre-zone"
+dns_name         = "libre-productivity.xyz"
+
+# GitHub → GCP Workload Identity
+github_owner       = "Kaustubh2k5"
+github_repository  = "Libre-productivity-platform"
+wif_allowed_branch = "development"
+wif_pool_id        = "github-pool"
+wif_provider_id    = "github-provider"
+
+# Auth service non-secret config
+otp_ttl                   = 300
+otp_max_attempts          = 10
+max_signup_attempts       = 5
+lock_time_seconds         = 900
+access_token_expiry       = "15m"
+refresh_token_expiry_days = 30
+refresh_token_ttl         = 2592000
+mail_user                 = "your-app-mail@example.com"
+client_id                 = "libre-web-app"
+
+# Sensitive — local/CI secrets only
+jwt_secret     = "replace-me"
+refresh_secret = "replace-me"
+db_password    = "replace-me"
+mail_password  = "replace-me"

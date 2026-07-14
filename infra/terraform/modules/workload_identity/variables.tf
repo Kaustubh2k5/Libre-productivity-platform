@@ -2,10 +2,6 @@ variable "project_id" {
   type = string
 }
 
-variable "project_number" {
-  type = string
-}
-
 variable "pool_id" {
   type = string
 }
@@ -32,9 +28,10 @@ variable "github_repository" {
 
 variable "allowed_branch" {
   type    = string
-  default = "main"
+  default = "development"
 }
 
-variable "service_account_email" {
-  type = string
+variable "service_account_emails" {
+  type        = list(string)
+  description = "Service accounts GitHub Actions may impersonate via this pool"
 }

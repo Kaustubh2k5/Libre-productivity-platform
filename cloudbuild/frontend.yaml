@@ -1,20 +1,29 @@
+substitutions:
+  _BUCKET_NAME: ""
+  _URL_MAP: ""
+
 steps:
-  #
-  # Install PNPM
-  #
-  - id: Setup PNPM
+  - id: validate-substitutions
+    name: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        if [ -z "${_BUCKET_NAME}" ] || [ -z "${_URL_MAP}" ]; then
+          echo "Missing required substitutions: _BUCKET_NAME and _URL_MAP"
+          exit 1
+        fi
+
+  - id: setup-pnpm
     name: node:22
     entrypoint: bash
     args:
       - -c
       - |
         corepack enable
-        corepack prepare pnpm@latest --activate
+        corepack prepare pnpm@11.1.1 --activate
 
-  #
-  # Install Dependencies
-  #
-  - id: Install Dependencies
+  - id: install-dependencies
     name: node:22
     dir: frontend
     entrypoint: bash
@@ -22,12 +31,10 @@ steps:
       - -c
       - |
         corepack enable
+        corepack prepare pnpm@11.1.1 --activate
         pnpm install --frozen-lockfile
 
-  #
-  # Lint
-  #
-  - id: Lint
+  - id: lint
     name: node:22
     dir: frontend
     entrypoint: bash
@@ -35,12 +42,10 @@ steps:
       - -c
       - |
         corepack enable
+        corepack prepare pnpm@11.1.1 --activate
         pnpm lint
 
-  #
-  # Build
-  #
-  - id: Build
+  - id: build
     name: node:22
     dir: frontend
     entrypoint: bash
@@ -48,12 +53,10 @@ steps:
       - -c
       - |
         corepack enable
+        corepack prepare pnpm@11.1.1 --activate
         pnpm build
 
-  #
-  # Upload Build
-  #
-  - id: Upload
+  - id: upload
     name: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
     entrypoint: bash
     args:
@@ -61,21 +64,18 @@ steps:
       - |
         gcloud storage rsync \
           frontend/dist \
-          gs://${_BUCKET_NAME} \
+          "gs://${_BUCKET_NAME}" \
           --recursive \
           --delete
 
-  #
-  # Invalidate CDN
-  #
-  - id: Invalidate CDN
+  - id: invalidate-cdn
     name: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
     entrypoint: bash
     args:
       - -c
       - |
         gcloud compute url-maps invalidate-cdn-cache \
-          ${_URL_MAP} \
+          "${_URL_MAP}" \
           --path "/*"
 
 options:

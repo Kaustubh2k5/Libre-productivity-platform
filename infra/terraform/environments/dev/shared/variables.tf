@@ -3,18 +3,12 @@ variable "project_id" {
 }
 
 variable "region" {
-  type        = string
-  description = "Primary region for shared and service workloads (asia-south1)"
+  type = string
 }
 
-variable "gateway_region" {
-  type        = string
-  description = "Fallback region for services unavailable in the primary region (API Gateway → asia-northeast1)"
-}
-
-variable "service_account_email" {
-  type        = string
-  description = "Runtime service account for Cloud Run services"
+variable "db_password" {
+  type      = string
+  sensitive = true
 }
 
 variable "jwt_secret" {
@@ -27,50 +21,9 @@ variable "refresh_secret" {
   sensitive = true
 }
 
-variable "db_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "otp_ttl" {
-  type = number
-}
-
-variable "otp_max_attempts" {
-  type = number
-}
-
-variable "max_signup_attempts" {
-  type = number
-}
-
-variable "lock_time_seconds" {
-  type = number
-}
-
-variable "access_token_expiry" {
-  type = string
-}
-
-variable "refresh_token_expiry_days" {
-  type = number
-}
-
-variable "refresh_token_ttl" {
-  type = number
-}
-
-variable "mail_user" {
-  type = string
-}
-
 variable "mail_password" {
   type      = string
   sensitive = true
-}
-
-variable "client_id" {
-  type = string
 }
 
 variable "network_name" {
