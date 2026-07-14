@@ -24,7 +24,7 @@ jobs:
     name: Deploy Frontend
     runs-on: ubuntu-latest
 
-    environment: development
+    environment: dev
 
     env:
       PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
