@@ -17,101 +17,101 @@ variable "service_account_email" {
   description = "Runtime service account for Cloud Run services"
 }
 
-variable "jwt_secret" {
-  type      = string
-  sensitive = true
-}
+# variable "jwt_secret" {
+#   type      = string
+#   sensitive = true
+# }
 
-variable "refresh_secret" {
-  type      = string
-  sensitive = true
-}
+# variable "refresh_secret" {
+#   type      = string
+#   sensitive = true
+# }
 
-variable "db_password" {
-  type      = string
-  sensitive = true
-}
+# variable "db_password" {
+#   type      = string
+#   sensitive = true
+# }
 
-variable "otp_ttl" {
-  type = number
-}
+# variable "otp_ttl" {
+#   type = number
+# }
 
-variable "otp_max_attempts" {
-  type = number
-}
+# variable "otp_max_attempts" {
+#   type = number
+# }
 
-variable "max_signup_attempts" {
-  type = number
-}
+# variable "max_signup_attempts" {
+#   type = number
+# }
 
-variable "lock_time_seconds" {
-  type = number
-}
+# variable "lock_time_seconds" {
+#   type = number
+# }
 
-variable "access_token_expiry" {
-  type = string
-}
+# variable "access_token_expiry" {
+#   type = string
+# }
 
-variable "refresh_token_expiry_days" {
-  type = number
-}
+# variable "refresh_token_expiry_days" {
+#   type = number
+# }
 
-variable "refresh_token_ttl" {
-  type = number
-}
+# variable "refresh_token_ttl" {
+#   type = number
+# }
 
-variable "mail_user" {
-  type = string
-}
+# variable "mail_user" {
+#   type = string
+# }
 
-variable "mail_password" {
-  type      = string
-  sensitive = true
-}
+# variable "mail_password" {
+#   type      = string
+#   sensitive = true
+# }
 
-variable "client_id" {
-  type = string
-}
+# variable "client_id" {
+#   type = string
+# }
 
-variable "network_name" {
-  type = string
-}
+# variable "network_name" {
+#   type = string
+# }
 
-variable "subnet_name" {
-  type = string
-}
+# variable "subnet_name" {
+#   type = string
+# }
 
-variable "subnet_cidr" {
-  type = string
-}
+# variable "subnet_cidr" {
+#   type = string
+# }
 
-variable "vpc_connector_name" {
-  type = string
-}
+# variable "vpc_connector_name" {
+#   type = string
+# }
 
-variable "vpc_connector_cidr" {
-  type = string
-}
+# variable "vpc_connector_cidr" {
+#   type = string
+# }
 
-variable "redis_name" {
-  type = string
-}
+# variable "redis_name" {
+#   type = string
+# }
 
-variable "redis_display_name" {
-  type = string
-}
+# variable "redis_display_name" {
+#   type = string
+# }
 
-variable "cloudsql_instance_name" {
-  type = string
-}
+# variable "cloudsql_instance_name" {
+#   type = string
+# }
 
-variable "artifact_registry_id" {
-  type = string
-}
+# variable "artifact_registry_id" {
+#   type = string
+# }
 
-variable "artifact_registry_description" {
-  type = string
-}
+# variable "artifact_registry_description" {
+#   type = string
+# }
 
 variable "frontend_bucket_name" {
   type = string

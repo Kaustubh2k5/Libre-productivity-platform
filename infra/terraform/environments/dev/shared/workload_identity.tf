@@ -4,7 +4,7 @@ module "github_wif" {
   project_id = var.project_id
 
   pool_id           = var.wif_pool_id
-  pool_display_name = "GitHub Pool"
+  pool_display_name = "GitHub Pool V2"
 
   provider_id           = var.wif_provider_id
   provider_display_name = "GitHub Provider"

@@ -1,29 +1,31 @@
 resource "google_dns_record_set" "root" {
 
-  name = "${var.dns_name}."
-
   managed_zone = var.managed_zone
+
+  name = "${trim(var.dns_name, ".")}."
 
   type = "A"
 
-  ttl = 300
+  ttl = var.ttl
 
   rrdatas = [
     var.ip_address
   ]
+
 }
 
 resource "google_dns_record_set" "www" {
 
-  name = "www.${var.dns_name}."
-
   managed_zone = var.managed_zone
+
+  name = "www.${trim(var.dns_name, ".")}."
 
   type = "CNAME"
 
-  ttl = 300
+  ttl = var.ttl
 
   rrdatas = [
-    "${var.dns_name}."
+    "${trim(var.dns_name, ".")}."
   ]
+
 }

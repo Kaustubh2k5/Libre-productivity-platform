@@ -6,6 +6,14 @@ module "frontend_bucket" {
   location    = var.region
 }
 
+module "frontend_zone" {
+  source = "../../../modules/managed_zone"
+
+  zone_name   = "libre-zone"
+  dns_name    = "libre-productivity.xyz"
+  description = "Libre frontend DNS zone"
+}
+
 module "frontend_backend_bucket" {
   source = "../../../modules/backend_bucket"
 

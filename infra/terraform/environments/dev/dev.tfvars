@@ -33,7 +33,7 @@ dns_name         = "libre-productivity.xyz"
 github_owner       = "Kaustubh2k5"
 github_repository  = "Libre-productivity-platform"
 wif_allowed_branch = "development"
-wif_pool_id        = "github-pool"
+wif_pool_id        = "github-pool-v2"
 wif_provider_id    = "github-provider"
 
 otp_ttl                   = 300

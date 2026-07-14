@@ -1,50 +1,50 @@
-output "network_id" {
-  value = module.vpc.network_id
-}
+# output "network_id" {
+#   value = module.vpc.network_id
+# }
 
-output "network_name" {
-  value = module.vpc.network_name
-}
+# output "network_name" {
+#   value = module.vpc.network_name
+# }
 
-output "vpc_connector_id" {
-  value = module.vpc_connector.connector_id
-}
+# output "vpc_connector_id" {
+#   value = module.vpc_connector.connector_id
+# }
 
-output "cloudsql_connection_name" {
-  value = module.cloudsql.connection_name
-}
+# output "cloudsql_connection_name" {
+#   value = module.cloudsql.connection_name
+# }
 
-output "cloudsql_public_ip" {
-  value = module.cloudsql.public_ip
-}
+# output "cloudsql_public_ip" {
+#   value = module.cloudsql.public_ip
+# }
 
-output "cloudsql_private_ip" {
-  value = module.cloudsql.private_ip
-}
+# output "cloudsql_private_ip" {
+#   value = module.cloudsql.private_ip
+# }
 
-output "cloudsql_database_name" {
-  value = module.cloudsql.database_name
-}
+# output "cloudsql_database_name" {
+#   value = module.cloudsql.database_name
+# }
 
-output "cloudsql_database_user" {
-  value = module.cloudsql.database_user
-}
+# output "cloudsql_database_user" {
+#   value = module.cloudsql.database_user
+# }
 
-output "redis_host" {
-  value = module.memorystore.host
-}
+# output "redis_host" {
+#   value = module.memorystore.host
+# }
 
-output "redis_port" {
-  value = module.memorystore.port
-}
+# output "redis_port" {
+#   value = module.memorystore.port
+# }
 
-output "artifact_registry_repo" {
-  value = module.artifact_registry.repository_url
-}
+# output "artifact_registry_repo" {
+#   value = module.artifact_registry.repository_url
+# }
 
-output "artifact_registry_id" {
-  value = var.artifact_registry_id
-}
+# output "artifact_registry_id" {
+#   value = var.artifact_registry_id
+# }
 
 output "terraform_sa_email" {
   value = module.terraform_sa.email
