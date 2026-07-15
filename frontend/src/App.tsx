@@ -23,7 +23,6 @@ function App() {
     <Routes>
       {/* Landing */}
       <Route path="/" element={<LandingPage />} />
-
       {/* Auth */}
       <Route path="/auth" element={<Auth />}>
         <Route index element={<AuthLanding />} />
