@@ -30,7 +30,7 @@ ssl_domains = [
 dns_managed_zone = "libre-zone"
 dns_name         = "libre-productivity.xyz"
 
-github_owner       = "Kaustubh2k5"
+github_owner       = "Libre-DevTeam"
 github_repository  = "Libre-Webapp"
 wif_allowed_branch = "development"
 wif_pool_id        = "github-pool-v2"

@@ -27,6 +27,7 @@ module "frontend_iam" {
     "roles/compute.loadBalancerAdmin",
     "roles/cloudbuild.builds.editor",
     "roles/logging.logWriter",
+    "roles/serviceusage.serviceUsageConsumer",
   ]
 }
 
