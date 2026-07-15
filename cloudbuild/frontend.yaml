@@ -59,11 +59,9 @@ steps:
     args:
       - -c
       - |
-        gcloud storage rsync \
+        gsutil -m rsync -r -d \
           frontend/dist \
-          gs://${_BUCKET_NAME} \
-          --recursive \
-          --delete
+          gs://${_BUCKET_NAME}
 
   - id: invalidate-cdn
     name: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
