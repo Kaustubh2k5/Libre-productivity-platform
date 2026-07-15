@@ -31,7 +31,8 @@ function App() {
         <Route path="verify" element={<VerifyPage/>} />
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
       </Route>
-      
+        
+        
       {/* Onboarding */}
       <Route path="/onboarding" element={<OnboardingLayout />}>
         <Route index element={<Welcome />} />
