@@ -69,3 +69,7 @@ output "frontend_url_map_name" {
 output "frontend_lb_ip" {
   value = module.frontend_lb.ip_address
 }
+
+output "frontend_trigger_id" {
+  value = module.frontend_trigger.id
+}

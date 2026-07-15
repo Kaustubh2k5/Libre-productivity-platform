@@ -33,6 +33,9 @@
 # output "service_account_email" {
 #   value = module.auth.service_account_email
 # }
+output "frontend_trigger_id" {
+  value = module.shared.frontend_trigger_id
+}
 
 output "frontend_bucket_name" {
   value = module.shared.frontend_bucket_name

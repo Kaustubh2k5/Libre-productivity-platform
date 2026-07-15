@@ -8,7 +8,7 @@ resource "google_compute_url_map" "this" {
 
   name = "${var.name}-url-map"
 
-  default_service = var.backend_bucket_name
+  default_service = var.backend_bucket_self_link
 
 }
 

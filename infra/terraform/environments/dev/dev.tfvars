@@ -31,7 +31,7 @@ dns_managed_zone = "libre-zone"
 dns_name         = "libre-productivity.xyz"
 
 github_owner       = "Libre-DevTeam"
-github_repository  = "Libre-Webapp"
+github_repository = "projects/libre-26/locations/asia-south1/connections/github/repositories/Libre-Webapp"
 wif_allowed_branch = "development"
 wif_pool_id        = "github-pool-v2"
 wif_provider_id    = "github-provider"

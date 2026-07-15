@@ -1,3 +1,7 @@
+data "google_project" "current" {
+  project_id = var.project_id
+}
+
 module "frontend_bucket" {
   source = "../../../modules/storage_bucket"
 
@@ -43,4 +47,12 @@ module "frontend_dns" {
   managed_zone = var.dns_managed_zone
   dns_name     = var.dns_name
   ip_address   = module.frontend_lb.ip_address
+}
+
+resource "google_project_iam_member" "cloudbuild_secret_admin" {
+  project = var.project_id
+
+  role = "roles/secretmanager.admin"
+
+  member = "serviceAccount:service-${data.google_project.current.number}@gcp-sa-cloudbuild.iam.gserviceaccount.com"
 }

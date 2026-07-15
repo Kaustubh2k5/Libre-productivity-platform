@@ -1,0 +1,10 @@
+name: frontend-deploy
+description: Deploy frontend on development branch push
+filename: cloudbuild/frontend.yaml
+substitutions:
+  _BUCKET_NAME: libre-frontend-dev
+  _URL_MAP: libre-frontend-lb-url-map
+repositoryEventConfig:
+  repository: Libre-Webapp
+  push:
+    branch: development

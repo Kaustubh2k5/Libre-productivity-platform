@@ -17,6 +17,11 @@ variable "service_account_email" {
   description = "Runtime service account for Cloud Run services"
 }
 
+variable "cloudbuild_repository" {
+  type        = string
+  description = "Cloud Build repository for frontend deployment"
+}
+
 # variable "jwt_secret" {
 #   type      = string
 #   sensitive = true

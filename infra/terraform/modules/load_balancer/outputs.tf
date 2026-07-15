@@ -9,3 +9,7 @@ output "url_map" {
 output "https_proxy" {
   value = google_compute_target_https_proxy.this.id
 }
+
+output "url_map_name" {
+  value = google_compute_url_map.this.name
+}

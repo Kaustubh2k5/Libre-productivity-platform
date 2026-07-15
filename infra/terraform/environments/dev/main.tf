@@ -30,6 +30,7 @@ module "shared" {
 
   github_owner       = var.github_owner
   github_repository  = var.github_repository
+  cloudbuild_repository = var.cloudbuild_repository
   wif_allowed_branch = var.wif_allowed_branch
   wif_pool_id        = var.wif_pool_id
   wif_provider_id    = var.wif_provider_id
