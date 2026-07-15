@@ -4,5 +4,4 @@ function Auth() {
   return <Outlet />;
 }
 
-
 export default Auth;

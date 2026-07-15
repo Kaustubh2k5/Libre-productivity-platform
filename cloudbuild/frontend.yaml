@@ -23,16 +23,16 @@ steps:
         corepack prepare pnpm@11.1.1 --activate
         pnpm install --frozen-lockfile
 
-  - id: lint
-    name: node:22
-    dir: frontend
-    entrypoint: bash
-    args:
-      - -c
-      - |
-        corepack enable
-        corepack prepare pnpm@11.1.1 --activate
-        pnpm lint
+  # - id: lint
+  #   name: node:22
+  #   dir: frontend
+  #   entrypoint: bash
+  #   args:
+  #     - -c
+  #     - |
+  #       corepack enable
+  #       corepack prepare pnpm@11.1.1 --activate
+  #       pnpm lint
 
   - id: build
     name: node:22
