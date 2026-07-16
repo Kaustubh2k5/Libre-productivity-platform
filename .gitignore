@@ -119,6 +119,7 @@ override.tf.json
 # Never commit secret-bearing var files (local-only)
 *.auto.tfvars
 *.auto.tfvars.json
+*.tfvars
 terraform.tfvars
 terraform.tfvars.json
 **/terraform.tfvars
